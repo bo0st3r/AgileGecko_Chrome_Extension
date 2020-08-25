@@ -1,0 +1,6 @@
+{
+  "name": "Agile Gecko",
+  "version": "1.0",
+  "description": "Chrome extension that makes reaching a CoinGecko coin's page faster.",
+  "manifest_version": 2
+}

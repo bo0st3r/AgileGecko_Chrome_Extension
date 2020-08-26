@@ -1,8 +1,8 @@
 <h2>Coins:</h2>
 <form>
-  <input [(ngModel)]="searchedCoin" (ngModelChange)="findMatchingCoins()" type="text" name="coinSearched" id="coin-searched" />
+  <input [(ngModel)]="searchedCoin" (ngModelChange)="matchAndSortCoins()" type="text" name="coinSearched" id="coin-searched" />
 </form>
 
-<div *ngFor="let coin of matchingCoins">
+<div *ngFor="let coin of matchingCoins | slice:0:3">
   <a (click)="openCoinTab(coin.id)" href="#">{{coin.name}}</a>
 </div>

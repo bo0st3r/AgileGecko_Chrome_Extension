@@ -3,7 +3,9 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ["Chrome"]
+    "types": [
+      "Chrome"
+    ]
   },
   "files": [
     "src/main.ts",

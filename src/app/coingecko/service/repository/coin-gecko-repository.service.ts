@@ -11,6 +11,6 @@ export class CoinGeckoRepositoryService {
   constructor(private httpClient: HttpClient) { }
 
   public fetchCoins(): Observable<CoinDto[]> {
-    return this.httpClient.get<CoinDto[]>(environment.coingecko_api + '/coins/list');
+    return this.httpClient.get<CoinDto[]>(environment.coingecko_api + 'coins/list');
   }
 }

@@ -12,12 +12,19 @@
     "background",
     "browsingData",
     "clipboardRead",
-
+    "<all_urls>",
     "https://api.coingecko.com/api/v3/*"
   ],
   "browser_action": {
     "default_popup": "index.html"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://api.coingecko.com/api/v3/*"],
+      "js": ["scripts/fetcher.js"],
+      "run_at": "document_end"
+    }
+  ]
 }
 
 

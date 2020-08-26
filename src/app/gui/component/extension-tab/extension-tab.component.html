@@ -1,5 +1,8 @@
-<h2>Coinas:</h2>
-<h4>{{nb | number:'4.0-0'}} {{test}}</h4>
-<div *ngFor="let coin of coins">
-    {{coin.symbol}}
+<h2>Coins:</h2>
+<form>
+  <input [(ngModel)]="searchedCoin" (ngModelChange)="findMatchingCoins()" type="text" name="coinSearched" id="coin-searched" />
+</form>
+
+<div *ngFor="let coin of matchingCoins">
+  <a (click)="openCoinTab(coin.id)" href="#">{{coin.name}}</a>
 </div>

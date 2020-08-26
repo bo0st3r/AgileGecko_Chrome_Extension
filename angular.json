@@ -22,12 +22,15 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/manifest.json"
+              "src/manifest.json",
+              "src/scripts/"
             ],
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/scripts/fetcher.js"
+            ]
           },
           "configurations": {
             "production": {

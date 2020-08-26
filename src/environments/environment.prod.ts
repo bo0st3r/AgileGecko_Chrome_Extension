@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  coingecko_api: 'api.coingecko.com/api/v3/'
 };

@@ -3,7 +3,22 @@
   "version": "1.0",
   "description": "Chrome extension that makes reaching a CoinGecko coin's page faster.",
   "manifest_version": 2,
+  "permissions": [
+    "storage",
+    "webRequest",
+    "webNavigation",
+    "tabs",
+    "cookies",
+    "background",
+    "browsingData",
+    "clipboardRead",
+
+    "https://api.coingecko.com/api/v3/*"
+  ],
   "browser_action": {
     "default_popup": "index.html"
   }
 }
+
+
+

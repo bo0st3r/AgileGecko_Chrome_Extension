@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { ExtensionTabComponent } from './gui/component/extension-tab/extension-tab.component';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
+import {InputTextModule} from 'primeng';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import {FormsModule} from '@angular/forms';
   imports: [
     BrowserModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    InputTextModule
   ],
   providers: [],
   bootstrap: [AppComponent]

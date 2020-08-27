@@ -20,8 +20,18 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://api.coingecko.com/api/v3/*"],
-      "js": ["scripts/fetcher.js"],
+      "matches": [
+        "https://api.coingecko.com/api/v3/*"
+      ],
+      "js": [
+        "scripts/fetcher.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "js": [
+        "scripts/util.js"
+      ],
       "run_at": "document_end"
     }
   ]

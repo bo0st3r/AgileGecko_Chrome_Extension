@@ -14,12 +14,11 @@ export class ExtensionTabComponent implements OnInit {
 
   public matchingCoins: CoinDto[];
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit(): void {
     // Tries to retrieve the coins list from the localStorage every 200ms until done
-    const delay = timer(0, 200);
+    const delay = timer(0, 10);
     const fetchCoinsSub = delay.subscribe(() => {
       if (this.coinListExists()) {
         this.coins = this.retrieveCoinList();
@@ -31,7 +30,7 @@ export class ExtensionTabComponent implements OnInit {
   /**
    * Matches and sort the coin list if @
    * @see sortCoinsByLength
-   * @method sortCoinsByLength  a
+   * @method sortCoinsByLength
    */
   public matchAndSortCoins(): void {
     if (this.searchedCoin.length >= 2) {

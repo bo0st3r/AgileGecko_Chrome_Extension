@@ -11,10 +11,10 @@ export class ExtensionTabComponent implements OnInit {
   private COIN_PREFIX = 'https://www.coingecko.com/en/coins/';
   private TIMER_DELAY_MS = 20;
 
-  public coins: CoinDto[];
+  public coins: CoinDto[] = new Array();
 
   public searchedCoin = '';
-  public matchingCoins: CoinDto[];
+  public matchingCoins: CoinDto[] = new Array();
 
   constructor() {}
 
@@ -31,51 +31,11 @@ export class ExtensionTabComponent implements OnInit {
   }
 
   /**
-   * Matches and sort the coin list if @
-   * @see sortCoinsByLength
-   * @method sortCoinsByLength
+   * Opens a new tab in the explorer by using the given coinId.
+   * @param coinId ID of the coin to consult
    */
-  public matchAndSortCoins(): void {
-    if (this.searchedCoin.length >= 2) {
-      this.filterCoins();
-
-      if (this.matchingCoins.length > 3) {
-        this.sortCoinsByLength();
-      }
-      this.sortCoinsBySymbolSimilarity();
-    }
-  }
-
   public openCoinTab(coinId: string): void {
     chrome.tabs.create({url: this.COIN_PREFIX + coinId}, () => {
-    });
-  }
-
-  // Sort the coins from shortest to longer if more than 3 entries
-  private sortCoinsByLength(): void {
-    this.matchingCoins.sort((a, b) => a.name.length - b.name.length);
-  }
-
-  // Sort the coins by their symbol's similarity with the searched coin
-  private sortCoinsBySymbolSimilarity(): void {
-    this.matchingCoins.sort((a, b) => {
-      const loweredSearchedCoin = this.searchedCoin.toLowerCase();
-      if (a.symbol.toLowerCase() === loweredSearchedCoin) {
-        return -1;
-      } else if (b.symbol.toLowerCase() === loweredSearchedCoin) {
-        return 1;
-      }
-      return 0;
-    });
-  }
-
-
-  private filterCoins(): void {
-    this.matchingCoins = this.coins.filter(coin => {
-      const searchedCoinLowered = this.searchedCoin.toLowerCase();
-      const nameLowered = coin.name.toLowerCase();
-      const symbolLowered = coin.symbol.toLowerCase();
-      return nameLowered.includes(searchedCoinLowered) || symbolLowered.includes(searchedCoinLowered);
     });
   }
 

@@ -1,9 +1,9 @@
 <span class="p-float-label m-3">
     <input id="coin-searched" type="text" autocomplete="off" pInputText
-           [(ngModel)]="searchedCoin" (ngModelChange)="matchAndSortCoins()">
+           [(ngModel)]="searchedCoin">
     <label for="coin-searched">Coin</label>
 </span>
 
-<div *ngFor="let coin of matchingCoins | slice:0:5">
+<div *ngFor="let coin of coins | matchCoin:searchedCoin | slice:0:5">
   <a (click)="openCoinTab(coin.id)" href="#">{{coin.name}}</a>
 </div>

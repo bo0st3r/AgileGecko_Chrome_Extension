@@ -6,13 +6,13 @@ import { ExtensionTabComponent } from './gui/component/extension-tab/extension-t
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {InputTextModule, TooltipModule} from 'primeng';
-import {MatchingCoinPipe} from './coingecko/pipe/matching-coin.pipe';
+import {MatchCoinPipe} from './coingecko/pipe/matching-coin.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     ExtensionTabComponent,
-    MatchingCoinPipe
+    MatchCoinPipe
   ],
   imports: [
     TooltipModule,

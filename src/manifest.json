@@ -24,12 +24,7 @@
         "https://api.coingecko.com/api/v3/*"
       ],
       "js": [
-        "scripts/fetcher.js"
-      ],
-      "run_at": "document_end"
-    },
-    {
-      "js": [
+        "scripts/fetcher.js",
         "scripts/util.js"
       ],
       "run_at": "document_end"

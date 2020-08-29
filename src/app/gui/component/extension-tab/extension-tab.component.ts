@@ -8,18 +8,21 @@ import {timer} from 'rxjs';
   styleUrls: ['./extension-tab.component.css']
 })
 export class ExtensionTabComponent implements OnInit {
-  public COIN_PREFIX = 'https://www.coingecko.com/en/coins/';
-  public coins: CoinDto[];
-  public searchedCoin = '';
+  private COIN_PREFIX = 'https://www.coingecko.com/en/coins/';
+  private TIMER_DELAY_MS = 20;
 
+  public coins: CoinDto[];
+
+  public searchedCoin = '';
   public matchingCoins: CoinDto[];
 
   constructor() {}
 
   ngOnInit(): void {
     // Tries to retrieve the coins list from the localStorage every 200ms until done
-    const delay = timer(0, 10);
+    const delay = timer(0, this.TIMER_DELAY_MS);
     const fetchCoinsSub = delay.subscribe(() => {
+      console.log('check');
       if (this.coinListExists()) {
         this.coins = this.retrieveCoinList();
         fetchCoinsSub.unsubscribe();
@@ -66,6 +69,7 @@ export class ExtensionTabComponent implements OnInit {
     });
   }
 
+
   private filterCoins(): void {
     this.matchingCoins = this.coins.filter(coin => {
       const searchedCoinLowered = this.searchedCoin.toLowerCase();
@@ -75,10 +79,16 @@ export class ExtensionTabComponent implements OnInit {
     });
   }
 
+  /**
+   * Verifies if @valu
+   */
   private coinListExists(): boolean {
-    return this.retrieveCoinList() != null;
+    return this.retrieveCoinList().length > 0;
   }
 
+  /**
+   * Retrieves the coin list from localStorage at 'coinGeckoCoins' key.
+   */
   private retrieveCoinList(): CoinDto[] {
     return JSON.parse(localStorage.getItem('coinGeckoCoins'));
   }

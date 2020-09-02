@@ -1,4 +1,8 @@
 body{
-  min-width: 300px;
-  max-height: 400px;
+  min-width: 350px;
+  min-height: 230px;
+}
+
+.hyperlink {
+  color: #5889eb !important;
 }

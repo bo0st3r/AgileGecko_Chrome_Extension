@@ -7,12 +7,13 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {InputTextModule, TooltipModule} from 'primeng';
 import {MatchCoinPipe} from './coingecko/pipe/matching-coin.pipe';
+import {TabManagerService} from './chrome/util/tab-manager.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     ExtensionTabComponent,
-    MatchCoinPipe
+    MatchCoinPipe,
   ],
   imports: [
     TooltipModule,
@@ -21,7 +22,9 @@ import {MatchCoinPipe} from './coingecko/pipe/matching-coin.pipe';
     FormsModule,
     InputTextModule
   ],
-  providers: [],
+  providers: [
+    MatchCoinPipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

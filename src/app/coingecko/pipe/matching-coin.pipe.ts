@@ -7,7 +7,9 @@ import {CoinDto} from '../dto/coin-dto';
 /**
  * Filters an array of CoinDto by giving the searched coin name or symbol.
  * @see matchAndSortCoins
- * @see
+ * @see filterCoins first
+ * @see sortCoinsByLength
+ * @see sortCoinsBySymbolSimilarity
  */
 export class MatchCoinPipe implements PipeTransform {
   private searchedCoin: string;

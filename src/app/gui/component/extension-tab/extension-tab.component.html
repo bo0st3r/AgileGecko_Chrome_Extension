@@ -1,9 +1,22 @@
-<span class="p-float-label m-3">
-    <input id="coin-searched" type="text" autocomplete="off" pInputText
-           [(ngModel)]="searchedCoin">
-    <label for="coin-searched">Coin</label>
-</span>
+<div class="container mt-5 mb-3 mx-3">
+  <div class="row">
+    <div class="p-float-label mb-3">
+        <input id="coin-searched" type="text" autocomplete="off" pInputText
+               [(ngModel)]="searchedCoin"
+               (keydown.enter)="tabManagerService.openTab(COIN_PREFIX, firstMatchingCoinID())">
+        <label for="coin-searched">Coin</label>
+    </div>
+  </div>
 
-<div *ngFor="let coin of coins | matchCoin:searchedCoin | slice:0:5">
-  <a (click)="openCoinTab(coin.id)" href="#">{{coin.name}}</a>
+  <div *ngFor="let coin of coins | matchCoin:searchedCoin | slice:0:5" class="row">
+    <div class="row pb-1">
+      <div class="col-8">
+        {{coin.name}} {{coin.symbol}}
+      </div>
+      <div class="col-4">
+        <a (click)="tabManagerService.openTab(COIN_PREFIX, coin.id)" href="#">CoinGecko</a>
+        <a (click)="tabManagerService.openTab(CHARTEX_PREFIX, coin.symbol)" href="#">ChartEx</a>
+      </div>
+    </div>
+  </div>
 </div>

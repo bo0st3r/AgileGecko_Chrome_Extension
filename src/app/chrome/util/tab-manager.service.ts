@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import id = chrome.runtime.id;
+import {logger} from 'codelyzer/util/logger';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,8 @@ export class TabManagerService {
 
   /**
    * Opens a new tab in the explorer, adds a suffix if given.
-   * @param coinId ID of the coin to consult
    */
-  public openTab(url: string, suffix?: string): void {
-    chrome.tabs.create({url: url + suffix}, () => {});
+  public openTab(url: string): void {
+    chrome.tabs.create({url}, () => {});
   }
 }

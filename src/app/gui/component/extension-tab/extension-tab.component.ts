@@ -11,12 +11,36 @@ import {environment} from '../../../../environments/environment';
   styleUrls: ['./extension-tab.component.css']
 })
 export class ExtensionTabComponent implements OnInit {
+  /**
+   * Time in ms between 2 calls  of the localStorage for {@link retrieveCoinList}.
+   */
   private TIMER_DELAY_MS = 20;
+  /**
+   * CoinGecko's coins pages prefix.
+   */
   public COIN_PREFIX = 'https://www.coingecko.com/en/coins/';
+  /**
+   * ChartEx's pair pages prefix.
+   */
   public CHARTEX_PREFIX = 'https://chartex.pro/?symbol=UNISWAP:';
 
+  /**
+   * List of coins retrieved from the localStorage by using {@link retrieveCoinList}.
+   */
   public coins: CoinDto[] = new Array();
+  /**
+   * Name or symbol of the searched coin.
+   */
   public searchedCoin = '';
+
+  /**
+   * List of coins matching {@link searchedCoin} within {@link coins}.
+   */
+  public matchingCoins: CoinDto[];
+  /**
+   * Index of the selected coin in the HTML's table.
+   */
+  public indexSelectedMatchingCoins = 0;
 
   constructor(
     public tabManagerService: TabManagerService,
@@ -24,8 +48,6 @@ export class ExtensionTabComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.devStuff();
-
     // Tries to retrieve the coins list from the localStorage every 200ms until done
     const delay = timer(0, this.TIMER_DELAY_MS);
     const fetchCoinsSub = delay.subscribe(() => {
@@ -33,6 +55,7 @@ export class ExtensionTabComponent implements OnInit {
       if (this.coinListExists()) {
         this.coins = this.retrieveCoinList();
         fetchCoinsSub.unsubscribe();
+        this.devStuff();
       }
     });
   }
@@ -44,24 +67,18 @@ export class ExtensionTabComponent implements OnInit {
   private devStuff(): void {
     if (!environment.production){
       this.searchedCoin = 'btc';
+      this.updateMatchingCoins();
     }
   }
 
   /**
-   * Returns the id of the first coin matching from the list of matching coins given by MatchingCoinPipe.
-   * @see MatchCoinPipe
+   * Updates the list of matching coins by using {@link searchedCoin}'s value.
+   * @see searchedCoin
    */
-  public firstMatchingCoinID(): string {
+  public updateMatchingCoins(): void {
     if (this.coins && this.coins.length > 0){
-      return this.matchingCoinPipe.transform(this.coins, this.searchedCoin)[0].id;
+      this.matchingCoins = this.matchingCoinPipe.transform(this.coins, this.searchedCoin);
     }
-  }
-
-  /**
-   * Verifies if the coins list is already stored in localStorage and has at least 1 element.
-   */
-  private coinListExists(): boolean {
-    return this.retrieveCoinList().length > 0;
   }
 
   /**
@@ -69,5 +86,12 @@ export class ExtensionTabComponent implements OnInit {
    */
   private retrieveCoinList(): CoinDto[] {
     return JSON.parse(localStorage.getItem('coinGeckoCoins'));
+  }
+
+  /**
+   * Verifies if the coins list is already stored in localStorage and has at least 1 element.
+   */
+  private coinListExists(): boolean {
+    return this.retrieveCoinList().length > 0;
   }
 }

@@ -1,19 +1,27 @@
 <div class="container-xs m-1 border-dark border">
   <div class="row mx-1">
+<!--    Search input-->
     <div class="col-12 my-4">
       <div class="row justify-content-center mx-2 p-placeholder">
         <input id="coin-searched" type="text" autocomplete="off" placeholder="Name or symbol " pInputText
-                 [(ngModel)]="searchedCoin" (ngModelChange)="updateMatchingCoins()"
-                 (keydown.enter)="tabManagerService.openTab(COIN_PREFIX + matchingCoins[indexSelectedMatchingCoins].id.toString())">
+               [(ngModel)]="searchedCoin" (ngModelChange)="updateMatchingCoins()"
+               (keydown.enter)="tabManagerService.openTab(COIN_PREFIX + matchingCoins[indexSelectedMatchingCoins].id.toString())">
       </div>
     </div>
 
-    <div class="col-12" *ngFor="let coin of matchingCoins | slice:0:5; index as i">
-      <div class="row pb-1" (mouseout)="indexSelectedMatchingCoins = -1">
-        <div class="col" (mouseover)="indexSelectedMatchingCoins = i"
-             [ngClass]="{'active-coin': i == indexSelectedMatchingCoins, 'filtered-coin': i != indexSelectedMatchingCoins}">
-          <a (click)="tabManagerService.openTab(COIN_PREFIX + coin.id)" class="mr-2 hyperlink font-weight-bold">{{coin.name}}</a>
-          <a (click)="tabManagerService.openTab(CHARTEX_PREFIX + coin.symbol)" class="hyperlink font-weight-bold">ChartEx</a>
+<!--    List of filtered coins-->
+    <div class="col-12" *ngFor="let coin of matchingCoins | slice:0:5; index as i;">
+      <div class="row pb-1" (mouseover)="indexSelectedMatchingCoins = i" (mouseout)="indexSelectedMatchingCoins = -1">
+        <div class="col" [ngClass]="i == indexSelectedMatchingCoins ? 'active-coin':'filtered-coin'">
+<!--          CoinGecko link-->
+          <a (click)="tabManagerService.openTab(COIN_PREFIX + coin.id)"
+             class="mr-2 hyperlink font-weight-bold">{{coin.name}}</a>
+<!--          ChartEx link-->
+          <a (click)="tabManagerService.openTab(CHARTEX_PREFIX + coin.symbol)"
+             class="mr-2 hyperlink font-weight-bold">ChartEx</a>
+<!--          Favorite icon-->
+          <i (click)="favoriteManagerService.updateAndSaveFavorite(coin)"
+            class="pi pi-star" [ngClass]="(favoriteCoinsContains(coin)) ? 'favorite' : 'not-favorite'"></i>
         </div>
       </div>
     </div>

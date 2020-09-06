@@ -10,7 +10,6 @@ function fetchCoinList() {
   })();
 }
 
-console.log('hey fetcher')
 // Startup
 if (!localStorage.getItem('coinGeckoCoins')) {
   fetchCoinList();

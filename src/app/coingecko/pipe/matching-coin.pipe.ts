@@ -16,7 +16,7 @@ export class MatchCoinPipe implements PipeTransform {
   private coins: CoinDto[];
   private matchingCoins: CoinDto[];
 
-  transform(coins: CoinDto[], searchedCoin: string): CoinDto[] {
+  public transform(coins: CoinDto[], searchedCoin: string): CoinDto[] {
     this.searchedCoin = searchedCoin;
     this.coins = coins;
 

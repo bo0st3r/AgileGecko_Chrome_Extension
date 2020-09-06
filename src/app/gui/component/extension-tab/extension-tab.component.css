@@ -1,7 +1,15 @@
-.active-coin{
+.active-coin {
   background-color: rgba(8, 201, 255, 0.8);
 }
 
-.filtered-coin{
+.filtered-coin {
   background-color: rgba(8, 201, 255, 0.02);
+}
+
+.favorite {
+  color: #ffed00;
+}
+
+.not-favorite {
+  color: #1f1f1f;
 }

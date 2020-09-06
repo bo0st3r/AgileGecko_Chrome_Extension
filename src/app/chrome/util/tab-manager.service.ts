@@ -5,6 +5,9 @@ import {logger} from 'codelyzer/util/logger';
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * Manages tabs in Chrome.
+ */
 export class TabManagerService {
 
   constructor() { }

@@ -6,4 +6,11 @@ body {
 
 .hyperlink {
   color: #5889eb !important;
+  font-weight: 600;
 }
+
+.hyperlink:hover {
+  font-weight: 700;
+}
+
+

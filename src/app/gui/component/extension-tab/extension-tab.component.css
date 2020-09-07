@@ -1,13 +1,16 @@
 .active-coin {
-  background-color: rgba(8, 201, 255, 0.8);
+  background-color: rgba(0, 176, 255, 0.06);
 }
 
 .filtered-coin {
-  background-color: rgba(8, 201, 255, 0.02);
 }
 
 .favorite {
   color: #ffed00;
+}
+
+.favorite:hover {
+  font-size: 1.1em;
 }
 
 .not-favorite {

@@ -56,7 +56,12 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  // TODO
+  /**
+   * Do:
+   * -Retrieving the list of coins (tries every {@link TIMER_DELAY_MS} seconds until found).
+   * -Subscribes to {@link FavoriteManagerService} observable for favorite coins updates.
+   * -Asks {@link FavoriteManagerService} for a notification and assigns it's value to {@link matchingCoins}.
+   */
   ngOnInit(): void {
     // Tries to retrieve the coins list from the localStorage every 200ms until done
     const delay = timer(0, this.TIMER_DELAY_MS);
@@ -75,7 +80,9 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
     this.matchingCoins = this.favoriteCoins;
   }
 
-  // TODO
+  /**
+   * Unsubscribe from {@link favoriteCoinsSubscription}.
+   */
   ngOnDestroy(): void {
     this.favoriteCoinsSubscription.unsubscribe();
   }
@@ -91,6 +98,16 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
     } else if (this.favoriteCoins.length > 0) {
       this.matchingCoins = this.favoriteCoins;
     }
+  }
+
+  /**
+   * Check if the favoriteCoins list contains the given coin.
+   * It does so by using the 'some' method and comparing coin's IDs instead of using the 'includes' method,
+   * because it is comparing a {@link CoinDTO} object to a list of JSON objects.
+   * @param coin the coin to compare
+   */
+  public favoriteCoinsContains(coin: CoinDto): boolean {
+    return this.favoriteCoins.some(value => value.id === coin.id);
   }
 
   /**
@@ -119,15 +136,5 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
    */
   private coinListExists(): boolean {
     return this.retrieveCoinList().length > 0;
-  }
-
-  /**
-   * Check if the favoriteCoins list contains the given coin.
-   * It does so by using the 'some' method and comparing coin's IDs instead of using the 'includes' method,
-   * because it is comparing a {@link CoinDTO} object to a list of JSON objects.
-   * @param coin the coin to compare
-   */
-  public favoriteCoinsContains(coin: CoinDto): boolean {
-    return this.favoriteCoins.some(value => value.id === coin.id);
   }
 }

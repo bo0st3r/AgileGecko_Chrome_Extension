@@ -1,6 +1,6 @@
 <div class="container-xs m-1 border-dark border">
   <div class="row mx-1">
-<!--    Search input-->
+    <!--    Search input-->
     <div class="col-12 my-4">
       <div class="row justify-content-center mx-2 p-placeholder">
         <input id="coin-searched" type="text" autocomplete="off" placeholder="Name or symbol " pInputText
@@ -10,26 +10,26 @@
     </div>
 
 
-<!--    <div class="card">-->
-<!--      <p-table [value]="let ">-->
+    <!--    <div class="card">-->
+    <!--      <p-table [value]="let ">-->
 
-<!--      </p-table>-->
-<!--    </div>-->
+    <!--      </p-table>-->
+    <!--    </div>-->
 
 
-<!--    List of filtered coins-->
+    <!--    List of filtered coins-->
     <div class="col-12" *ngFor="let coin of matchingCoins | slice:0:5">
       <div class="row pb-1" (mouseover)="selectedCoin = coin" (mouseout)="selectedCoin = undefined">
         <div class="col" [ngClass]="coin === selectedCoin ? 'active-coin':'filtered-coin'">
-<!--          CoinGecko link-->
+          <!--          CoinGecko link-->
           <a (click)="tabManagerService.openTab(COIN_PREFIX + coin.id)"
-             class="mr-2 hyperlink font-weight-bold">{{coin.name}}</a>
-<!--          ChartEx link-->
+             class="mr-2 hyperlink">{{coin.name}}</a>
+          <!--          ChartEx link-->
           <a (click)="tabManagerService.openTab(CHARTEX_PREFIX + coin.symbol)"
-             class="mr-2 hyperlink font-weight-bold">ChartEx</a>
-<!--          Favorite icon-->
+             class="mr-2 hyperlink">ChartEx</a>
+          <!--          Favorite icon-->
           <i (click)="favoriteManagerService.updateAndSaveFavorite(coin)"
-            class="pi pi-star" [ngClass]="(favoriteCoinsContains(coin)) ? 'favorite' : 'not-favorite'"></i>
+             class="pi pi-star" [ngClass]="(favoriteCoinsContains(coin)) ? 'favorite' : 'not-favorite'"></i>
         </div>
       </div>
     </div>

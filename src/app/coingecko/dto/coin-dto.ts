@@ -4,7 +4,7 @@
  * @see symbol
  * @see name
  */
-export class CoinDto {
+export interface CoinDto {
   /**
    * Id of the coin.
    * Can be used to access the coin's page on CoinGecko.
@@ -18,12 +18,4 @@ export class CoinDto {
    * The name of the coin, e.g.: Ethereum.
    */
   name: string;
-
-  public fromJSON(json: string): CoinDto{
-    const jsonCoin = JSON.parse(json);
-    this.id = jsonCoin.id;
-    this.symbol = jsonCoin.symbol;
-    this.name = jsonCoin.name;
-    return this;
-  }
 }

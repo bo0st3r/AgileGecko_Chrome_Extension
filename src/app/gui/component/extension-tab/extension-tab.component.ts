@@ -41,9 +41,9 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
    */
   public favoriteCoinsSubscription: Subscription;
   /**
-   * Index of the selected coin in the HTML's table.
+   * Selected coin on the UI.
    */
-  public indexSelectedMatchingCoins = 0;
+  public selectedCoin: CoinDto;
   /**
    * Time in ms between 2 calls  of the localStorage for {@link retrieveCoinList}.
    */

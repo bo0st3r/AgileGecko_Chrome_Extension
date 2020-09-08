@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { ExtensionTabComponent } from './gui/component/extension-tab/extension-tab.component';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
-import {InputTextModule, TooltipModule} from 'primeng';
+import {InputTextModule, TableModule, TooltipModule} from 'primeng';
 import {MatchCoinPipe} from './coingecko/pipe/matching-coin.pipe';
 import {TabManagerService} from './chrome/util/tab-manager.service';
 
@@ -20,7 +20,8 @@ import {TabManagerService} from './chrome/util/tab-manager.service';
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    InputTextModule
+    InputTextModule,
+    TableModule
   ],
   providers: [
     MatchCoinPipe

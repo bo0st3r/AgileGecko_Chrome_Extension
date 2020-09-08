@@ -3,8 +3,10 @@ import {CoinDto} from '../../../coingecko/dto/coin-dto';
 import {Subscription, timer} from 'rxjs';
 import {TabManagerService} from '../../../chrome/util/tab-manager.service';
 import {MatchCoinPipe} from '../../../coingecko/pipe/matching-coin.pipe';
-import {environment} from '../../../../environments/environment';
 import {FavoriteManagerService} from '../../service/favorite-manager.service';
+import {Url} from '../../../coingecko/enum/url.enum';
+import {LocalStorageKey} from '../../../coingecko/enum/key.enum';
+import {LocalStorageManagerService} from '../../../chrome/util/storage/local-storage-manager.service';
 
 @Component({
   selector: 'app-extension-tab',
@@ -13,25 +15,25 @@ import {FavoriteManagerService} from '../../service/favorite-manager.service';
 })
 export class ExtensionTabComponent implements OnInit, OnDestroy {
   /**
-   * CoinGecko's coins pages prefix.
+   * Instance of the {@link Url} enum.
    */
-  public COIN_PREFIX = 'https://www.coingecko.com/en/coins/';
-  /**
-   * ChartEx's pair pages prefix.
-   */
-  public CHARTEX_PREFIX = 'https://chartex.pro/?symbol=UNISWAP:';
-  /**
-   * List of coins retrieved from the localStorage by using {@link retrieveCoinList}.
-   */
-  public coins: CoinDto[] = [];
+  public Url = Url;
   /**
    * Name or symbol of the searched coin.
    */
   public searchedCoin = '';
   /**
-   * List of coins matching {@link searchedCoin} within {@link coins}.
+   * Selected coin on the UI.
    */
-  public matchingCoins: Array<CoinDto> = new Array<CoinDto>();
+  public selectedCoin: CoinDto;
+  /**
+   * List of coins retrieved from the localStorage by using {@link retrieveCoinList}.
+   */
+  public coins: CoinDto[] = [];
+  /**
+   * List of coins displayed {@link searchedCoin} within {@link coins}.
+   */
+  public displayedCoins: Array<CoinDto> = new Array<CoinDto>();
   /**
    * List of the user's favorite coins.
    */
@@ -41,10 +43,6 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
    */
   public favoriteCoinsSubscription: Subscription;
   /**
-   * Selected coin on the UI.
-   */
-  public selectedCoin: CoinDto;
-  /**
    * Time in ms between 2 calls  of the localStorage for {@link retrieveCoinList}.
    */
   private TIMER_DELAY_MS = 20;
@@ -52,15 +50,15 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
   constructor(
     public tabManagerService: TabManagerService,
     public favoriteManagerService: FavoriteManagerService,
-    public matchCoinPipe: MatchCoinPipe
-  ) {
+    public localStorageManagerService: LocalStorageManagerService,
+    public matchCoinPipe: MatchCoinPipe) {
   }
 
   /**
    * Do:
    * -Retrieving the list of coins (tries every {@link TIMER_DELAY_MS} seconds until found).
    * -Subscribes to {@link FavoriteManagerService} observable for favorite coins updates.
-   * -Asks {@link FavoriteManagerService} for a notification and assigns it's value to {@link matchingCoins}.
+   * -Asks {@link FavoriteManagerService} for a notification and assigns it's value to {@link displayedCoins}.
    */
   ngOnInit(): void {
     // Tries to retrieve the coins list from the localStorage every 200ms until done
@@ -68,7 +66,6 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
     const fetchCoinsSub = delay.subscribe(() => {
       if (this.coinListExists()) {
         this.coins = this.retrieveCoinList();
-        // this.devStuff();
         fetchCoinsSub.unsubscribe();
       }
     });
@@ -77,26 +74,27 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
       this.favoriteCoins = favoriteCoins;
     });
     this.favoriteManagerService.notify();
-    this.matchingCoins = this.favoriteCoins;
+    this.displayedCoins = this.favoriteCoins;
   }
 
   /**
-   * Unsubscribe from {@link favoriteCoinsSubscription}.
+   * Unsubscribe from {@link favoriteCoinsSubscription} and deletes value for {@link LocalStorageKey.COINS_LIST}.
    */
   ngOnDestroy(): void {
     this.favoriteCoinsSubscription.unsubscribe();
+    this.localStorageManagerService.delete(LocalStorageKey.COINS_LIST);
   }
 
   /**
-   * Updates the list of matching coins by using {@link searchedCoin}'s value.
+   * Updates the list of displayed coins by using {@link searchedCoin}'s value.
    * If empty, displays the list of favorite coins ({@link favoriteCoins}) instead.
    * @see searchedCoin
    */
-  public updateMatchingCoins(): void {
+  public updateDisplayedCoins(): void {
     if (this.coins.length > 0 && this.searchedCoin.length > 0) {
-      this.matchingCoins = this.matchCoinPipe.transform(this.coins, this.searchedCoin);
+      this.displayedCoins = this.matchCoinPipe.transform(this.coins, this.searchedCoin);
     } else if (this.favoriteCoins.length > 0) {
-      this.matchingCoins = this.favoriteCoins;
+      this.displayedCoins = this.favoriteCoins;
     }
   }
 
@@ -111,30 +109,16 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * If dev. env.:
-   * Set 'searchedCoin' value as 'btc'.
-   */
-  private devStuff(): void {
-    if (!environment.production) {
-      // const btc = this.matchCoinPipe.transform(this.coins, 'btc').shift();
-      // const eth = this.matchCoinPipe.transform(this.coins, 'eth').shift();
-      // this.matchingCoins.push(btc, eth);
-      this.searchedCoin = 'btc';
-      this.updateMatchingCoins();
-    }
-  }
-
-  /**
-   * Retrieves the coin list from localStorage at 'coinGeckoCoins' key.
-   */
-  private retrieveCoinList(): CoinDto[] {
-    return JSON.parse(localStorage.getItem('coinGeckoCoins'));
-  }
-
-  /**
    * Verifies if the coins list is already stored in localStorage and has at least 1 element.
    */
   private coinListExists(): boolean {
     return this.retrieveCoinList().length > 0;
+  }
+
+  /**
+   * Retrieves the coin list from localStorage at {@link LocalStorageKey.COINS_LIST} key.
+   */
+  private retrieveCoinList(): CoinDto[] {
+    return this.localStorageManagerService.find(LocalStorageKey.COINS_LIST);
   }
 }

@@ -16,6 +16,12 @@ export class MatchCoinPipe implements PipeTransform {
   private coins: CoinDto[];
   private matchingCoins: CoinDto[];
 
+  /**
+   * Filters and sort coins to match the searched coin.
+   * If nothing is found, returns an empty Array.
+   * @param coins list of coins to filter and sort
+   * @param searchedCoin name or symbol of the coin to search for
+   */
   public transform(coins: CoinDto[], searchedCoin: string): CoinDto[] {
     this.searchedCoin = searchedCoin;
     this.coins = coins;
@@ -25,7 +31,7 @@ export class MatchCoinPipe implements PipeTransform {
       return this.matchingCoins;
     }
     else {
-      return coins;
+      return new Array<CoinDto>();
     }
   }
 

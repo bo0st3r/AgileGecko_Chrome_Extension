@@ -1,6 +1,6 @@
 body {
   background-color: #fcfcfc;
-  min-width: 330px;
+  min-width: 370px;
   min-height: 230px;
 }
 
@@ -10,6 +10,7 @@ body {
 }
 
 .hyperlink:hover {
+  color: #578eef !important;
   font-weight: 700;
 }
 

@@ -1,17 +1,20 @@
+html{
+  font-size: 15px!important;
+}
+
 body {
   background-color: #fcfcfc;
-  min-width: 370px;
+  min-width: 450px;
   min-height: 230px;
+
 }
 
 .hyperlink {
   color: #5889eb !important;
-  font-weight: 600;
 }
 
 .hyperlink:hover {
-  color: #578eef !important;
-  font-weight: 700;
+  text-shadow: 0.06em 0.06em 0.05em rgba(40, 40, 40, 0.07);
 }
 
 

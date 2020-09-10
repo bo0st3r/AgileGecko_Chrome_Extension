@@ -3,39 +3,46 @@
     <!--    Search input-->
     <div class="col-12 my-4">
       <div class="row justify-content-center mx-2 p-placeholder">
-        <input id="coin-searched" type="text" autocomplete="off" placeholder="Name or symbol " pInputText
-               [(ngModel)]="searchedCoin" (ngModelChange)="updateDisplayedCoins()"
-               (keydown.enter)="tabManagerService.openTab(Url.COINGECKO_PREFIX + selectedCoin.id.toString())">
+        <input (keydown.enter)="tabManagerService.openTab(Url.COINGECKO_PREFIX + selectedCoin.id.toString())"
+               [(ngModel)]="searchedCoin" (ngModelChange)="updateDisplayedCoins()" autocomplete="off"
+               id="coin-searched"
+               pInputText placeholder="Name or symbol"
+               type="text">
       </div>
     </div>
 
-    https://primefaces.org/primeng/showcase/#/table/striped
-
     <div class="card">
-      <p-table [value]="displayedCoins" [scrollable]="true" [rows]="6" scrollHeight="280px"
-               [virtualScroll]="true" [virtualRowHeight]="10" styleClass="p-datatable-striped">
+      <p-table [(selection)]="selectedCoin" [rows]="6"
+               [scrollable]="true" [value]="displayedCoins" [virtualRowHeight]="10" [virtualScroll]="true"
+               scrollHeight="280px"
+               selectionMode="single" styleClass="p-datatable-striped">
         <ng-template pTemplate="header">
           <tr>
             <th>CoinGecko</th>
+            <th>Symbol</th>
             <th>Chart</th>
-            <th>Favorite</th>
+            <th style="width: 23%;">Favorite</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-coin>
+        <ng-template let-coin pTemplate="body">
           <tr>
             <td>
               <a (click)="tabManagerService.openTab(Url.COINGECKO_PREFIX + coin.id)"
-                 class="mr-2 hyperlink">{{coin.name}}</a>
+                 class="mr-2 hyperlink font-weight-bold">{{coin.name}}</a>
+            </td>
+            <td>
+              <p class="mr-2 font-weight-bold">{{coin.symbol | uppercase}}</p>
             </td>
             <!--          ChartEx link-->
             <td>
               <a (click)="tabManagerService.openTab(Url.CHARTEX_PREFIX + coin.symbol)"
-                 class="mr-2 hyperlink">ChartEx</a>
+                 class="mr-2 hyperlink font-weight-bold">ChartEx</a>
             </td>
             <!--          Favorite icon-->
-            <td>
+            <td style="width: 23%;">
               <i (click)="favoriteManagerService.updateAndSaveFavorite(coin)"
-                 class="pi pi-star" [ngClass]="(favoriteCoinsContains(coin)) ? 'favorite' : 'not-favorite'"></i>
+                 [ngClass]="(favoriteCoinsContains(coin)) ? 'favorite' : 'not-favorite'"
+                 class="pi pi-star justify-content-end align-content-end align-self-end"></i>
             </td>
           </tr>
         </ng-template>
@@ -43,21 +50,21 @@
     </div>
 
 
-    <!--    List of filtered coins-->
-<!--    <div class="col-12" *ngFor="let coin of displayedCoins | slice:0:5">-->
-<!--      <div class="row pb-1" (mouseover)="selectedCoin = coin" (mouseout)="selectedCoin = undefined">-->
-<!--        <div class="col" [ngClass]="coin === selectedCoin ? 'active-coin':'filtered-coin'">-->
-<!--          &lt;!&ndash;          CoinGecko link&ndash;&gt;-->
-<!--          <a (click)="tabManagerService.openTab(Url.COINGECKO_PREFIX + coin.id)"-->
-<!--             class="mr-2 hyperlink">{{coin.name}}</a>-->
-<!--          &lt;!&ndash;          ChartEx link&ndash;&gt;-->
-<!--          <a (click)="tabManagerService.openTab(Url.CHARTEX_PREFIX + coin.symbol)"-->
-<!--             class="mr-2 hyperlink">ChartEx</a>-->
-<!--          &lt;!&ndash;          Favorite icon&ndash;&gt;-->
-<!--          <i (click)="favoriteManagerService.updateAndSaveFavorite(coin)"-->
-<!--             class="pi pi-star" [ngClass]="(favoriteCoinsContains(coin)) ? 'favorite' : 'not-favorite'"></i>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!--        List of filtered coins-->
+    <!--        <div class="col-12" *ngFor="let coin of displayedCoins | slice:0:5">-->
+    <!--          <div class="row pb-1" (mouseover)="selectedCoin = coin" (mouseout)="selectedCoin = undefined">-->
+    <!--            <div class="col" [ngClass]="coin === selectedCoin ? 'active-coin':'filtered-coin'">-->
+    <!--              &lt;!&ndash;          CoinGecko link&ndash;&gt;-->
+    <!--              <a (click)="tabManagerService.openTab(Url.COINGECKO_PREFIX + coin.id)"-->
+    <!--                 class="mr-2 hyperlink">{{coin.name}}</a>-->
+    <!--              &lt;!&ndash;          ChartEx link&ndash;&gt;-->
+    <!--              <a (click)="tabManagerService.openTab(Url.CHARTEX_PREFIX + coin.symbol)"-->
+    <!--                 class="mr-2 hyperlink">ChartEx</a>-->
+    <!--              &lt;!&ndash;          Favorite icon&ndash;&gt;-->
+    <!--              <i (click)="favoriteManagerService.updateAndSaveFavorite(coin)"-->
+    <!--                 class="pi pi-star" [ngClass]="(favoriteCoinsContains(coin)) ? 'favorite' : 'not-favorite'"></i>-->
+    <!--            </div>-->
+    <!--          </div>-->
+    <!--        </div>-->
   </div>
 </div>

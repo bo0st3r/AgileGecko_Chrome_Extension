@@ -7,6 +7,7 @@ import {FavoriteManagerService} from '../../service/favorite-manager.service';
 import {Url} from '../../../coingecko/enum/url.enum';
 import {LocalStorageKey} from '../../../coingecko/enum/key.enum';
 import {LocalStorageManagerService} from '../../../chrome/util/storage/local-storage-manager.service';
+import {$e} from 'codelyzer/angular/styles/chars';
 
 @Component({
   selector: 'app-extension-tab',
@@ -95,6 +96,8 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
       this.displayedCoins = this.matchCoinPipe.transform(this.coins, this.searchedCoin);
     } else if (this.favoriteCoins.length > 0) {
       this.displayedCoins = this.favoriteCoins;
+    } else {
+      this.displayedCoins = new Array<CoinDto>();
     }
   }
 

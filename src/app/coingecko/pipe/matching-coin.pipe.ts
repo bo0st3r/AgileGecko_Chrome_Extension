@@ -41,7 +41,7 @@ export class MatchCoinPipe implements PipeTransform {
    * @method sortCoinsByLength
    */
   private matchAndSortCoins(): void {
-    if (this.searchedCoin.length > 0) {
+    if (this.searchedCoin.length >= 0) {
       this.filterCoins();
       this.sortCoinsByLength();
       this.sortCoinsBySymbolSimilarity();

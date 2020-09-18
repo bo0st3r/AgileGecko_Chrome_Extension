@@ -1,20 +1,19 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CoinDto} from '../../../coingecko/dto/coin-dto';
+import {CoinDto} from '../../dto/coin-dto';
 import {Subscription, timer} from 'rxjs';
 import {TabManagerService} from '../../../chrome/util/tab-manager.service';
-import {MatchCoinPipe} from '../../../coingecko/pipe/matching-coin.pipe';
-import {FavoriteManagerService} from '../../service/favorite-manager.service';
-import {Url} from '../../../coingecko/enum/url.enum';
-import {LocalStorageKey} from '../../../coingecko/enum/key.enum';
+import {FavoriteManagerService} from '../../../layout/service/favorite-manager.service';
 import {LocalStorageManagerService} from '../../../chrome/util/storage/local-storage-manager.service';
-import {$e} from 'codelyzer/angular/styles/chars';
+import {MatchCoinPipe} from '../../pipe/matching-coin.pipe';
+import {LocalStorageKey} from '../../enum/key.enum';
+import {Url} from 'src/app/coingecko/enum/url.enum';
 
 @Component({
-  selector: 'app-extension-tab',
-  templateUrl: './extension-tab.component.html',
-  styleUrls: ['./extension-tab.component.css']
+  selector: 'app-coin-search',
+  templateUrl: './coin-search.component.html',
+  styleUrls: ['./coin-search.component.css']
 })
-export class ExtensionTabComponent implements OnInit, OnDestroy {
+export class CoinSearchComponent implements OnInit, OnDestroy {
   /**
    * Instance of the {@link Url} enum.
    */
@@ -30,7 +29,7 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
   /**
    * List of coins retrieved from the localStorage by using {@link retrieveCoinList}.
    */
-  public coins: CoinDto[] = [];
+  public coins: Array<CoinDto> = new Array<CoinDto>();
   /**
    * List of coins displayed {@link searchedCoin} within {@link coins}.
    */
@@ -47,6 +46,11 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
    * Time in ms between 2 calls  of the localStorage for {@link retrieveCoinList}.
    */
   private TIMER_DELAY_MS = 20;
+  /**
+   * If the loading fails, this field is set to true.
+   */
+  public coinsLoadingFailed: boolean;
+  private nbChecksTreshold = 50;
 
   constructor(
     public tabManagerService: TabManagerService,
@@ -64,9 +68,14 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Tries to retrieve the coins list from the localStorage every 200ms until done
     const delay = timer(0, this.TIMER_DELAY_MS);
+    let nbChecks = 0;
     const fetchCoinsSub = delay.subscribe(() => {
+      nbChecks++;
       if (this.coinListExists()) {
         this.coins = this.retrieveCoinList();
+        fetchCoinsSub.unsubscribe();
+      } else if (nbChecks > this.nbChecksTreshold){
+        this.coinsLoadingFailed = true;
         fetchCoinsSub.unsubscribe();
       }
     });
@@ -89,13 +98,14 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
   /**
    * Updates the list of displayed coins by using {@link searchedCoin}'s value.
    * If empty, displays the list of favorite coins ({@link favoriteCoins}) instead.
+   * If there's no favorite, displays an empty list.
    * @see searchedCoin
    */
   public updateDisplayedCoins(): void {
     if (this.coins.length > 0 && this.searchedCoin.length > 0) {
       this.displayedCoins = this.matchCoinPipe.transform(this.coins, this.searchedCoin);
     } else if (this.favoriteCoins.length > 0) {
-      this.displayedCoins = this.favoriteCoins;
+      this.displayedCoins = this.matchCoinPipe.transform(this.favoriteCoins, this.searchedCoin);
     } else {
       this.displayedCoins = new Array<CoinDto>();
     }
@@ -121,7 +131,8 @@ export class ExtensionTabComponent implements OnInit, OnDestroy {
   /**
    * Retrieves the coin list from localStorage at {@link LocalStorageKey.COINS_LIST} key.
    */
-  private retrieveCoinList(): CoinDto[] {
-    return this.localStorageManagerService.find(LocalStorageKey.COINS_LIST);
+  private retrieveCoinList(): Array<CoinDto> {
+    const list: Array<CoinDto> = this.localStorageManagerService.find(LocalStorageKey.COINS_LIST);
+    return (list) ? list : new Array<CoinDto>();
   }
 }

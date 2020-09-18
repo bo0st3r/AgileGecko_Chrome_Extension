@@ -1,23 +1,62 @@
-html{
-  font-size: 15px!important;
-  min-width: 470px;
+/****************************************************
+                      Global
+*****************************************************/
+html {
+  font-size: 15px;
+  min-width: 460px;
+  max-width: 460px;
   min-height: 230px;
+  max-height: 430px;
+}
+body{
+  font-family: 'Work Sans', sans-serif !important;
 }
 
-.bg-bright{
+html[theme='dark-mode'] {
+  filter: invert(0.9) hue-rotate(180deg);
+}
+
+html[theme='dark-mode'] img{
+  filter: invert(0.9) hue-rotate(180deg);
+}
+
+/****************************************************
+                      BackGround
+*****************************************************/
+.bg-gradient-main {
+  background: linear-gradient(173deg, rgba(65, 128, 255, 1) 0%, rgba(203, 29, 114, 1) 100%) !important;
+}
+
+.bg-bright {
   background-color: #fdfdfd;
 }
 
-.bg-dark{
+.bg-dark {
   background-color: #1b1b1b;
 }
 
+/****************************************************
+                      Text
+*****************************************************/
 .hyperlink {
   color: #5895eb !important;
 }
 
 .hyperlink:hover {
-  text-shadow: 0.02em 0.02em 0.14em rgba(90, 148, 248, 0.23);
+  text-shadow: 0.03em 0.03em 0.14em rgba(90, 148, 248, 0.25);
+  text-decoration: underline !important;
 }
 
+/****************************************************
+                      PrimeNG
+*****************************************************/
+/* TabView */
+.p-tabview-panels {
+  padding: 0 !important;
+}
+
+/* Dialog */
+.loading-error-dialog {
+  width:83%;
+}
 

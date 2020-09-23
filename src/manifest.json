@@ -13,6 +13,7 @@
     "browsingData",
     "clipboardRead",
     "<all_urls>",
+    "https://*/",
     "https://api.coingecko.com/api/v3/*"
   ],
   "browser_action": {

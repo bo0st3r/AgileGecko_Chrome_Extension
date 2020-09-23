@@ -3,13 +3,10 @@
 *****************************************************/
 html {
   font-size: 15px;
-  min-width: 460px;
-  max-width: 460px;
-  min-height: 230px;
-  max-height: 430px;
-}
-body{
-  font-family: 'Work Sans', sans-serif !important;
+  min-width: 440px;
+  max-width: 440px;
+  min-height: 508px;
+  max-height: 508px;
 }
 
 html[theme='dark-mode'] {
@@ -50,6 +47,10 @@ html[theme='dark-mode'] img{
 /****************************************************
                       PrimeNG
 *****************************************************/
+/* All components */
+.p-component {
+}
+
 /* TabView */
 .p-tabview-panels {
   padding: 0 !important;

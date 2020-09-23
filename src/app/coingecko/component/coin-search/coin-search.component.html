@@ -1,18 +1,18 @@
 <!--Error dialog-->
 <p-dialog header="No coins list" [(visible)]="coinsLoadingFailed"
           styleClass="loading-error-dialog" [draggable]="false"
-          [modal]="true" [dismissableMask]="true">
-    We couldn't load the coins list, please check your Internet access or try later.
+          [modal]="true" [dismissableMask]="true" [closeOnEscape]="true">
+  We couldn't load the coins list, please check your Internet access or try later.
 </p-dialog>
 
 <!--Content-->
 <div class="container-xs bg-gradient-main p-1">
 
-  <div class="row mx-2">
+  <div class="row mx-2 mb-2">
     <!--    Search input-->
-    <div class="col-12 my-4">
+    <div class="col-12 my-3">
       <div class="row justify-content-center mx-2 p-placeholder">
-        <input (keydown.enter)="tabManagerService.openTab(Url.COINGECKO_PREFIX + selectedCoin.id.toString())"
+        <input (keydown.enter)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + selectedCoin.id.toString())"
                [(ngModel)]="searchedCoin" (ngModelChange)="updateDisplayedCoins()" autocomplete="off"
                id="coin-searched"
                pInputText placeholder="Name or symbol"
@@ -20,14 +20,14 @@
       </div>
     </div>
 
-    <p-table [value]="displayedCoins" styleClass="p-datatable-striped"
-             [scrollable]="true" [rows]="6" [virtualRowHeight]="6" [virtualScroll]="true" scrollHeight="380px">
+    <p-table [value]="displayedCoins" styleClass="p-datatable-striped" scrollHeight="326px"
+             [scrollable]="true" [rows]="6" [virtualScroll]="true" [virtualRowHeight]="6">
       <ng-template pTemplate="header">
         <tr *ngIf="displayedCoins && displayedCoins.length > 0; then listSet else listUnset;"></tr>
         <ng-template #listSet>
           <tr>
-            <th style="width:20%">Symbol</th>
-            <th style="width:40%">CoinGecko</th>
+            <th style="width:22.5%">Symbol</th>
+            <th style="width:37.5%">CoinGecko</th>
             <th style="width:20%">ChartEx</th>
             <th style="width:20%">Favorite</th>
           </tr>
@@ -43,17 +43,17 @@
       <ng-template pTemplate="body" let-coin>
         <tr [pSelectableRow]="coin">
           <!--            Coin symbol-->
-          <td style="width:20%">
+          <td style="width:22.5%">
             <p class="d-inline mr-2 font-weight-bold">{{coin.symbol | uppercase}}</p>
           </td>
           <!--            Coin name-->
-          <td style="width:40%">
-            <a (click)="tabManagerService.openTab(Url.COINGECKO_PREFIX + coin.id)"
+          <td style="width:37.5%">
+            <a (click)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + coin.id)"
                class="mr-2 hyperlink font-weight-bold">{{coin.name}}</a>
           </td>
           <!--          ChartEx link-->
           <td class="text-center" style="width:20%">
-            <i (click)="tabManagerService.openTab(Url.COINGECKO_PREFIX + coin.id)"
+            <i (click)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + coin.id)"
                class="pi pi-chart-line mr-2 font-weight-bold chart-icon"></i>
           </td>
           <!--          Favorite icon-->

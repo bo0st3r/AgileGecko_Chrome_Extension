@@ -1,8 +1,29 @@
-<div  class="container-xs bg-gradient-main p-1 h-100">
-  <div class="row">
-    <div class="col">
-      Sup'
+<div class="container-xs bg-gradient-main p-1 h-100">
+  <div class="row mx-2 mb-2">
+    <!--    Search input-->
+    <div class="col-12 my-3">
+      <div class="p-formgroup-inline justify-content-center">
+        <div class="p-field-checkbox">
+          <p-radioButton name="type" [value]="ADDRESS_PREFIX" [(ngModel)]="searchPrefix" id="type1"></p-radioButton>
+          <label for="type1">Address</label>
+        </div>
+        <div class="p-field-checkbox">
+          <p-radioButton name="type" [value]="TOKEN_PREFIX" [(ngModel)]="searchPrefix" id="type2"></p-radioButton>
+          <label for="type2">Token</label>
+        </div>
+        <div class="p-field-checkbox">
+          <p-radioButton name="type" [value]="TRANSACTION_PREFIX" [(ngModel)]="searchPrefix" id="type3"></p-radioButton>
+          <label for="type3">Transaction</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mx-2 p-inputgroup p-placeholder">
+      <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+      <input (keydown.enter)="tabManagerService.openTab(searchUrl)"
+             [(ngModel)]="searchAddress" (ngModelChange)="updateSearchUrl()" autocomplete="off"
+             id="address-searched" pInputText placeholder="Address to look up"
+             type="text" autofocus>
     </div>
   </div>
 </div>
-

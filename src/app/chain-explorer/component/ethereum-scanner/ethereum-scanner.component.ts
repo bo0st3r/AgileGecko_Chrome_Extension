@@ -26,7 +26,8 @@ export class EthereumScannerComponent implements OnInit {
   constructor(public tabManagerService: TabManagerService) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   public updateSearchUrl(): void {
     // with or without 0x

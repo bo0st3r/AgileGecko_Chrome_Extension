@@ -1,29 +1,57 @@
-<div class="container-xs bg-gradient-main p-1 h-100">
-  <div class="row mx-2 mb-2">
+<div class="container-xs bg-gradient-main p-1 panel-min-height">
+  <div class="row mx-2 mb-3 mt-3">
     <!--    Search input-->
-    <div class="col-12 my-3">
-      <div class="p-formgroup-inline justify-content-center">
-        <div class="p-field-checkbox">
-          <p-radioButton name="type" [value]="ADDRESS_PREFIX" [(ngModel)]="searchPrefix" id="type1"></p-radioButton>
-          <label for="type1">Address</label>
+    <div class="col justify-content-center mx-2 p-inputgroup p-placeholder">
+      <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+      <input
+        [(ngModel)]="searchValue" (ngModelChange)="updateSearchingBools($event)" autocomplete="off"
+        id="address-searched" pInputText placeholder="Address, contract, tx, ... to look up"
+        type="text" autofocus (load)="searchValue = '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col mx-3">
+      <div class="row">
+        <div class="col-4">
+          <ag-extension-hyperlink [url]="urlAddressResearch()"
+                                  class="d-block" [disabled]="!searchingAddress" [text]="'Address'">
+          </ag-extension-hyperlink>
+          <ag-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_ERC20_TXNS_SUFFIX"
+                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'ERC20 Txns'">
+          </ag-extension-hyperlink>
+          <ag-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_INTERNAL_TXNS_SUFFIX"
+                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'Internal Txns'">
+          </ag-extension-hyperlink>
+          <ag-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_CONTRACT_SUFFIX"
+                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'Contract'">
+          </ag-extension-hyperlink>
+          <ag-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_LOANS_SUFFIX"
+                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'Loans'">
+          </ag-extension-hyperlink>
         </div>
-        <div class="p-field-checkbox">
-          <p-radioButton name="type" [value]="TOKEN_PREFIX" [(ngModel)]="searchPrefix" id="type2"></p-radioButton>
-          <label for="type2">Token</label>
+        <div class="col-4">
+          <ag-extension-hyperlink [url]="urlTokenResearch()"
+                                  class="d-block" [disabled]="!searchingAddress" [text]="'Token'">
+          </ag-extension-hyperlink>
+          <ag-extension-hyperlink [url]="urlTokenResearch() + TOKEN_HOLDERS_SUFFIX"
+                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'Holders'">
+          </ag-extension-hyperlink>
+          <ag-extension-hyperlink [url]="urlTokenResearch() + TOKEN_WRITE_CONTRACT_SUFFIX"
+                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'Write Contract'">
+          </ag-extension-hyperlink>
+          <ag-extension-hyperlink [url]="urlTokenResearch() + TOKEN_READ_CONTRACT_SUFFIX"
+                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'Read Contract'">
+          </ag-extension-hyperlink>
         </div>
-        <div class="p-field-checkbox">
-          <p-radioButton name="type" [value]="TRANSACTION_PREFIX" [(ngModel)]="searchPrefix" id="type3"></p-radioButton>
-          <label for="type3">Transaction</label>
+        <div class="col-4">
+          <ag-extension-hyperlink [url]="urlTransactionResearch()"
+                                  class="d-block" [disabled]="!searchingTx" [text]="'Transaction'">
+          </ag-extension-hyperlink>
+          <ag-extension-hyperlink [url]="urlBlockResearch()"
+                                  class="d-block" [disabled]="!searchingBlock" [text]="'Block'">
+          </ag-extension-hyperlink>
         </div>
       </div>
-    </div>
-
-    <div class="row justify-content-center mx-2 p-inputgroup p-placeholder">
-      <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
-      <input (keydown.enter)="tabManagerService.openTab(searchUrl)"
-             [(ngModel)]="searchAddress" (ngModelChange)="updateSearchUrl()" autocomplete="off"
-             id="address-searched" pInputText placeholder="Address to look up"
-             type="text" autofocus>
     </div>
   </div>
 </div>

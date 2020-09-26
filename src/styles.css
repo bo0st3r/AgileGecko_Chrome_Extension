@@ -18,10 +18,35 @@ html[theme='dark-mode'] img{
 }
 
 /****************************************************
+                      Miscellaneous
+*****************************************************/
+
+.opacity-0{
+  opacity: 0.0;
+}
+
+.opacity-1{
+  opacity: 0.2;
+}
+
+.opacity-2{
+  opacity: 0.4;
+}
+
+.opacity-3{
+  opacity: 0.6;
+}
+
+.opacity-4{
+  opacity: 0.8;
+}
+
+/****************************************************
                       BackGround
 *****************************************************/
 .bg-gradient-main {
-  background: linear-gradient(173deg, rgba(65, 128, 255, 1) 0%, rgba(203, 29, 114, 1) 100%) !important;
+  /*background: linear-gradient(173deg, rgba(65, 128, 255, 1) 0%, rgba(203, 29, 114, 1) 100%) !important;*/
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .bg-bright {
@@ -32,15 +57,19 @@ html[theme='dark-mode'] img{
   background-color: #1b1b1b;
 }
 
+
+
 /****************************************************
                       Text
 *****************************************************/
 .hyperlink {
-  color: #5895eb !important;
+  color: #589bf1 !important;
+  font-weight: bold;
 }
 
 .hyperlink:hover {
-  text-shadow: 0.03em 0.03em 0.14em rgba(90, 148, 248, 0.25);
+  color: #5890e6 !important;
+  text-shadow: 0.03em 0.03em 0.14em rgba(90, 148, 248, 0.15);
   text-decoration: underline !important;
 }
 
@@ -54,6 +83,10 @@ html[theme='dark-mode'] img{
 /* TabView */
 .p-tabview-panels {
   padding: 0 !important;
+}
+
+.panel-min-height {
+  min-height: 440px;
 }
 
 /* Dialog */

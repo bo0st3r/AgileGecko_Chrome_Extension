@@ -39,11 +39,11 @@
          */
         "@angular-eslint/directive-selector": [
           "error",
-          { "type": "attribute", "prefix": "app", "style": "camelCase" }
+          { "type": "attribute", "prefix": ["app","ag"], "style": "camelCase" }
         ],
         "@angular-eslint/component-selector": [
           "error",
-          { "type": "element", "prefix": "app", "style": "kebab-case" }
+          { "type": "element", "prefix": ["app","ag"], "style": "kebab-case" }
         ],
         "quotes": ["error", "single", { "allowTemplateLiterals": true }]
       }

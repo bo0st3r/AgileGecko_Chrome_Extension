@@ -1,5 +1,5 @@
 <!--Error dialog-->
-<p-dialog header="No coins list" [(visible)]="coinsLoadingFailed"
+<p-dialog header="Coin list not found" [(visible)]="coinsLoadingFailed"
           styleClass="loading-error-dialog" [draggable]="false"
           [modal]="true" [dismissableMask]="true" [closeOnEscape]="true">
   We couldn't load the coins list, please check your Internet access or try later.
@@ -7,16 +7,15 @@
 
 <!--Content-->
 <div class="container-xs bg-gradient-main p-1">
-  <div class="row mx-2 mb-2">
+  <div class="row mx-2 mb-2 justify-content-center">
     <!--    Search input-->
-    <div class="col-12 my-3">
-      <div class="row justify-content-center mx-2 p-placeholder">
-        <input (keydown.enter)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + selectedCoin.id.toString())"
-               [(ngModel)]="searchedCoin" (ngModelChange)="updateDisplayedCoins()" autocomplete="off"
-               id="coin-searched"
-               pInputText placeholder="Name or symbol"
-               type="text" autofocus>
-      </div>
+    <div class="col-9 my-3 justify-content-center p-inputgroup">
+      <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+      <input (keydown.enter)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + selectedCoin.id.toString())"
+             [(ngModel)]="searchedCoin" (ngModelChange)="updateDisplayedCoins()" autocomplete="off"
+             id="coin-searched"
+             pInputText placeholder="Name or symbol"
+             type="text" autofocus>
     </div>
 
     <!--    Results-->
@@ -27,9 +26,8 @@
         <ng-template #listSet>
           <tr>
             <th style="width:22.5%">Symbol</th>
-            <th style="width:37.5%">CoinGecko</th>
-            <th style="width:20%">ChartEx</th>
-            <th style="width:20%">Favorite</th>
+            <th style="width:61.5%">CoinGecko</th>
+            <th style="width:16%; text-align: center;">Quick</th>
           </tr>
         </ng-template>
         <ng-template #listUnset>
@@ -47,17 +45,17 @@
             <p class="d-inline mr-2 font-weight-bold">{{coin.symbol | uppercase}}</p>
           </td>
           <!--            Coin name-->
-          <td style="width:37.5%">
+          <td style="width:61.5%">
             <a (click)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + coin.id)"
                class="mr-2 hyperlink">{{coin.name}}</a>
           </td>
           <!--          ChartEx link-->
-          <td class="text-center" style="width:20%">
-            <i (click)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + coin.id)"
+          <td class="text-center align-middle" style="width:8%">
+            <i (click)="tabManagerService.openTab(Url.CHARTEX_PAIR_PREFIX + coin.symbol.toUpperCase())"
                class="pi pi-chart-line mr-2 chart-icon"></i>
           </td>
           <!--          Favorite icon-->
-          <td class="text-center align-middle" style="width:20%">
+          <td class="text-center align-middle" style="width:8%">
             <i (click)="favoriteManagerService.updateAndSaveFavorite(coin)" class="pi pi-star font-weight-bold"
                [ngClass]="(favoriteCoinsContains(coin)) ? 'favorite-icon' : 'not-favorite-icon'"></i>
           </td>

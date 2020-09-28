@@ -1,7 +1,18 @@
+td.text-center {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/**
+  Selected coin
+ */
 .active-coin {
   background-color: rgba(0, 176, 255, 0.06) !important;
 }
 
+/**
+  Favorites
+ */
 .favorite-icon {
   background: -webkit-radial-gradient(circle, rgba(255, 237, 0, 1) 0%, rgba(255, 226, 0, 1) 40%, rgba(255, 192, 0, 1) 100%);
   -webkit-background-clip: text;
@@ -16,6 +27,13 @@
   font-size: 1.35em;
 }
 
+.not-favorite {
+  color: #1f1f1f;
+}
+
+/**
+  Charts
+ */
 .chart-icon {
   background: linear-gradient(45deg, rgb(51, 209, 222) 0%, rgba(164, 255, 0, 1) 44%, rgba(141, 193, 49, 1) 100%);
   -webkit-background-clip: text;
@@ -23,6 +41,3 @@
   font-size: 1.35em;
 }
 
-.not-favorite {
-  color: #1f1f1f;
-}

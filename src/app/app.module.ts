@@ -16,7 +16,7 @@ import {TableModule} from 'primeng/table';
 import {TabViewModule} from 'primeng/tabview';
 import {DialogModule} from 'primeng/dialog';
 import {RadioButtonModule} from 'primeng/radiobutton';
-import { ExtensionHyperlinkComponent } from './small-component/component/extension-hyperlink/extension-hyperlink.component';
+import {ExtensionHyperlinkComponent} from './small-component/component/extension-hyperlink/extension-hyperlink.component';
 
 @NgModule({
   declarations: [

@@ -17,6 +17,11 @@ html[theme='dark-mode'] img{
   filter: invert(0.9) hue-rotate(180deg);
 }
 
+/*.p-datatable-scrollable-header-box {*/
+/*  padding-right: 0 !important;*/
+/*}*/
+
+
 /****************************************************
                       Miscellaneous
 *****************************************************/

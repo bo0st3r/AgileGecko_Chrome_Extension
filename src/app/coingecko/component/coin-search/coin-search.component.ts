@@ -1,12 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CoinDto} from '../../dto/coin-dto';
-import {Subscription, timer} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {TabManagerService} from '../../../chrome/util/tab-manager.service';
 import {FavoriteManagerService} from '../../../layout/service/favorite-manager.service';
 import {LocalStorageManagerService} from '../../../chrome/util/storage/local-storage-manager.service';
 import {MatchCoinPipe} from '../../pipe/matching-coin.pipe';
 import {LocalStorageKey} from '../../enum/key.enum';
 import {Url} from 'src/app/coingecko/enum/url.enum';
+import {CoinGeckoRepositoryService} from '../../service/repository/coin-gecko-repository.service';
 
 @Component({
   selector: 'app-coin-search',
@@ -14,10 +15,6 @@ import {Url} from 'src/app/coingecko/enum/url.enum';
   styleUrls: ['./coin-search.component.css']
 })
 export class CoinSearchComponent implements OnInit, OnDestroy {
-  /**
-   * Instance of the {@link Url} enum.
-   */
-  public Url = Url;
   /**
    * Name or symbol of the searched coin.
    */
@@ -27,7 +24,7 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    */
   public selectedCoin: CoinDto;
   /**
-   * List of coins retrieved from the localStorage by using {@link retrieveCoinList}.
+   * List of coins retrieved from the CoinGecko list endpoint by {@link CoinGeckoRepositoryService}.
    */
   public coins: Array<CoinDto> = new Array<CoinDto>();
   /**
@@ -43,46 +40,31 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    */
   public favoriteCoinsSubscription: Subscription;
   /**
-   * Time in ms between 2 calls  of the localStorage for {@link retrieveCoinList}.
-   */
-  private TIMER_DELAY_MS = 20;
-  /**
    * If the loading fails, this field is set to true.
    */
   public coinsLoadingFailed: boolean;
-  private nbChecksTreshold = 50;
+  /**
+   * Instance of the {@link Url} enum.
+   */
+  public Url = Url;
 
   constructor(
     public tabManagerService: TabManagerService,
     public favoriteManagerService: FavoriteManagerService,
     public localStorageManagerService: LocalStorageManagerService,
+    public coinGeckoRepositoryService: CoinGeckoRepositoryService,
     public matchCoinPipe: MatchCoinPipe) {
   }
 
   /**
    * Do:
-   * -Retrieving the list of coins (tries every {@link TIMER_DELAY_MS} seconds until found).
-   * -Subscribes to {@link FavoriteManagerService} observable for favorite coins updates.
-   * -Asks {@link FavoriteManagerService} for a notification and assigns it's value to {@link displayedCoins}.
+   * -Retrieve the list of coins
+   * -Subscribe to {@link FavoriteManagerService} observable for favorite coins updates.
+   * -Ask {@link FavoriteManagerService} for a notification and assigns it's value to {@link displayedCoins}.
    */
   ngOnInit(): void {
-    // Tries to retrieve the coins list from the localStorage every 200ms until done
-    const delay = timer(0, this.TIMER_DELAY_MS);
-    let nbChecks = 0;
-    const fetchCoinsSub = delay.subscribe(() => {
-      nbChecks++;
-      if (this.coinListExists()) {
-        this.coins = this.retrieveCoinList();
-        fetchCoinsSub.unsubscribe();
-      } else if (nbChecks > this.nbChecksTreshold){
-        this.coinsLoadingFailed = true;
-        fetchCoinsSub.unsubscribe();
-      }
-    });
-
-    this.favoriteCoinsSubscription = this.favoriteManagerService.favoriteUpdateAsObservable().subscribe(favoriteCoins => {
-      this.favoriteCoins = favoriteCoins;
-    });
+    this.fetchUpdateCoins();
+    this.loadFavorites();
     this.favoriteManagerService.notify();
     this.displayedCoins = this.favoriteCoins;
   }
@@ -93,6 +75,31 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.favoriteCoinsSubscription.unsubscribe();
     this.localStorageManagerService.delete(LocalStorageKey.COINS_LIST);
+  }
+
+  /**
+   * Fetch the coin list with {@link CoinGeckoRepositoryService} and update {@link coinsLoadingFailed}.
+   */
+  public fetchUpdateCoins(): void {
+    this.coinGeckoRepositoryService.fetchCoinList().subscribe(coinsResponse => {
+      if (coinsResponse.body) {
+        this.coins = coinsResponse.body;
+        this.coinsLoadingFailed = false;
+      } else {
+        this.coinsLoadingFailed = true;
+      }
+    }, error => {
+      this.coinsLoadingFailed = true;
+    });
+  }
+
+  /**
+   * Fetch the favorite list with {@link FavoriteManagerService} and update {@link favoriteCoins}.
+   */
+  public loadFavorites(): void {
+    this.favoriteCoinsSubscription = this.favoriteManagerService.favoriteUpdateAsObservable().subscribe(favoriteCoins => {
+      this.favoriteCoins = favoriteCoins;
+    });
   }
 
   /**
@@ -119,20 +126,5 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    */
   public favoriteCoinsContains(coin: CoinDto): boolean {
     return this.favoriteCoins.some(value => value.id === coin.id);
-  }
-
-  /**
-   * Verifies if the coins list is already stored in localStorage and has at least 1 element.
-   */
-  private coinListExists(): boolean {
-    return this.retrieveCoinList().length > 0;
-  }
-
-  /**
-   * Retrieves the coin list from localStorage at {@link LocalStorageKey.COINS_LIST} key.
-   */
-  private retrieveCoinList(): Array<CoinDto> {
-    const list: Array<CoinDto> = this.localStorageManagerService.find(LocalStorageKey.COINS_LIST);
-    return (list) ? list : new Array<CoinDto>();
   }
 }

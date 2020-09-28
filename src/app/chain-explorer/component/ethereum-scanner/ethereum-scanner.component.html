@@ -5,12 +5,12 @@
       <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
       <input
         [(ngModel)]="searchValue" (ngModelChange)="updateSearchingBools($event)" autocomplete="off"
-        id="address-searched" pInputText placeholder="Address, contract, tx, ... to look up"
-        type="text" autofocus (load)="searchValue = '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'">
+        id="address-searched" pInputText placeholder="Address, contract, tx, ..."
+        type="text" autofocus>
     </div>
   </div>
   <div class="row">
-    <div class="col mx-3">
+    <div class="col mx-3" id="eth-scanner-links">
       <div class="row">
         <div class="col-4">
           <ag-extension-hyperlink [url]="urlAddressResearch()"

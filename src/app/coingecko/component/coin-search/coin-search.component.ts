@@ -61,10 +61,17 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    * -Retrieve the list of coins
    * -Subscribe to {@link FavoriteManagerService} observable for favorite coins updates.
    * -Ask {@link FavoriteManagerService} for a notification and assigns it's value to {@link displayedCoins}.
+   * - Fetch the favorite list with {@link FavoriteManagerService} and update {@link favoriteCoins}.
+
    */
   ngOnInit(): void {
-    this.fetchUpdateCoins();
-    this.loadFavorites();
+    this.fetchAndUpdateCoins();
+
+    this.favoriteCoinsSubscription = this.favoriteManagerService.favoriteUpdateAsObservable().subscribe(favoriteCoins => {
+      this.favoriteCoins = favoriteCoins;
+    }, error => {
+      console.error(error);
+    });
     this.favoriteManagerService.notify();
     this.displayedCoins = this.favoriteCoins;
   }
@@ -80,7 +87,7 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
   /**
    * Fetch the coin list with {@link CoinGeckoRepositoryService} and update {@link coinsLoadingFailed}.
    */
-  public fetchUpdateCoins(): void {
+  public fetchAndUpdateCoins(): void {
     this.coinGeckoRepositoryService.fetchCoinList().subscribe(coinsResponse => {
       if (coinsResponse.body) {
         this.coins = coinsResponse.body;
@@ -90,15 +97,7 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
       }
     }, error => {
       this.coinsLoadingFailed = true;
-    });
-  }
-
-  /**
-   * Fetch the favorite list with {@link FavoriteManagerService} and update {@link favoriteCoins}.
-   */
-  public loadFavorites(): void {
-    this.favoriteCoinsSubscription = this.favoriteManagerService.favoriteUpdateAsObservable().subscribe(favoriteCoins => {
-      this.favoriteCoins = favoriteCoins;
+      throw error;
     });
   }
 

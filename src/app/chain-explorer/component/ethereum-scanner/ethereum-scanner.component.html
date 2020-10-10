@@ -1,55 +1,64 @@
-<div class="container-xs bg-gradient-main p-1 panel-min-height">
+<div class="container-xs bg-gradient-main p-2 panel-min-height">
+  <div class="row justify-content-start pl-2 pt-2">
+    <div class="col-2">
+      <r-extension-hyperlink isImg="true" [src]="'assets\\img\\etherscan_logo.svg'" url="https://www.etherscan.com/"
+                             alt="Etherscan logo" class="img-fluid pr-3"
+                             imgStyle="max-width:50px;"></r-extension-hyperlink>
+    </div>
+  </div>
+
   <div class="row mx-2 mb-3 mt-3">
     <!--    Search input-->
     <div class="col justify-content-center mx-2 p-inputgroup p-placeholder">
       <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
       <input
-        [(ngModel)]="searchValue" (ngModelChange)="updateSearchingBools($event)" autocomplete="off"
+        [(ngModel)]="searchValue" (ngModelChange)="updateSearchingBools($event)" autocomplete="off" coin
         id="address-searched" pInputText placeholder="Address, contract, tx, ..."
-        type="text" autofocus>
+        type=text autofocus>
     </div>
   </div>
+
   <div class="row">
     <div class="col mx-3" id="eth-scanner-links">
       <div class="row">
         <div class="col-4">
-          <ag-extension-hyperlink [url]="urlAddressResearch()"
-                                  class="d-block" [disabled]="!searchingAddress" [text]="'Address'">
-          </ag-extension-hyperlink>
-          <ag-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_ERC20_TXNS_SUFFIX"
-                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'ERC20 Txns'">
-          </ag-extension-hyperlink>
-          <ag-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_INTERNAL_TXNS_SUFFIX"
-                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'Internal Txns'">
-          </ag-extension-hyperlink>
-          <ag-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_CONTRACT_SUFFIX"
-                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'Contract'">
-          </ag-extension-hyperlink>
-          <ag-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_LOANS_SUFFIX"
-                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'Loans'">
-          </ag-extension-hyperlink>
+          <r-extension-hyperlink [url]="urlAddressResearch()"
+                                 class="d-block" [disabled]="!searchingAddress" text="Address">
+          </r-extension-hyperlink>
+          <r-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_ERC20_TXNS_SUFFIX"
+                                 class="d-block ml-1" [disabled]="!searchingAddress" text="ERC20 Txns">
+          </r-extension-hyperlink>
+          <r-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_INTERNAL_TXNS_SUFFIX"
+                                 class="d-block ml-1" [disabled]="!searchingAddress" text="Internal Txns">
+          </r-extension-hyperlink>
+          <r-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_CONTRACT_SUFFIX"
+                                 class="d-block ml-1" [disabled]="!searchingAddress" text="Contract">
+          </r-extension-hyperlink>
+          <r-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_LOANS_SUFFIX"
+                                 class="d-block ml-1" [disabled]="!searchingAddress" text="Loans">
+          </r-extension-hyperlink>
         </div>
         <div class="col-4">
-          <ag-extension-hyperlink [url]="urlTokenResearch()"
-                                  class="d-block" [disabled]="!searchingAddress" [text]="'Token'">
-          </ag-extension-hyperlink>
-          <ag-extension-hyperlink [url]="urlTokenResearch() + TOKEN_HOLDERS_SUFFIX"
-                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'Holders'">
-          </ag-extension-hyperlink>
-          <ag-extension-hyperlink [url]="urlTokenResearch() + TOKEN_WRITE_CONTRACT_SUFFIX"
-                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'Write Contract'">
-          </ag-extension-hyperlink>
-          <ag-extension-hyperlink [url]="urlTokenResearch() + TOKEN_READ_CONTRACT_SUFFIX"
-                                  class="d-block ml-1" [disabled]="!searchingAddress" [text]="'Read Contract'">
-          </ag-extension-hyperlink>
+          <r-extension-hyperlink [url]="urlTokenResearch()"
+                                 class="d-block" [disabled]="!searchingAddress" text="Token">
+          </r-extension-hyperlink>
+          <r-extension-hyperlink [url]="urlTokenResearch() + TOKEN_HOLDERS_SUFFIX"
+                                 class="d-block ml-1" [disabled]="!searchingAddress" text="Holders">
+          </r-extension-hyperlink>
+          <r-extension-hyperlink [url]="urlTokenResearch() + TOKEN_WRITE_CONTRACT_SUFFIX"
+                                 class="d-block ml-1" [disabled]="!searchingAddress" text="Write Contract">
+          </r-extension-hyperlink>
+          <r-extension-hyperlink [url]="urlTokenResearch() + TOKEN_READ_CONTRACT_SUFFIX"
+                                 class="d-block ml-1" [disabled]="!searchingAddress" text="Read Contract">
+          </r-extension-hyperlink>
         </div>
         <div class="col-4">
-          <ag-extension-hyperlink [url]="urlTransactionResearch()"
-                                  class="d-block" [disabled]="!searchingTx" [text]="'Transaction'">
-          </ag-extension-hyperlink>
-          <ag-extension-hyperlink [url]="urlBlockResearch()"
-                                  class="d-block" [disabled]="!searchingBlock" [text]="'Block'">
-          </ag-extension-hyperlink>
+          <r-extension-hyperlink [url]="urlTransactionResearch()"
+                                 class="d-block" [disabled]="!searchingTx" text="Transaction">
+          </r-extension-hyperlink>
+          <r-extension-hyperlink [url]="urlBlockResearch()"
+                                 class="d-block" [disabled]="!searchingBlock" text="Block">
+          </r-extension-hyperlink>
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {TabManagerService} from '../../../chrome/util/tab-manager.service';
+import {TabManagerService} from '../../../chrome/util/tab/tab-manager.service';
 import {Url} from '../../../coingecko/enum/url.enum';
 import {HttpClient} from '@angular/common/http';
 import {logger} from 'codelyzer/util/logger';
 
 @Component({
-  selector: 'app-ethereum-scanner',
+  selector: 'r-ethereum-scanner',
   templateUrl: './ethereum-scanner.component.html',
   styleUrls: ['./ethereum-scanner.component.css']
 })

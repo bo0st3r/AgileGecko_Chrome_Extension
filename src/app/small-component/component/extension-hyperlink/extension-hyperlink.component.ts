@@ -1,12 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {TabManagerService} from '../../../chrome/util/tab-manager.service';
+import {TabManagerService} from '../../../chrome/util/tab/tab-manager.service';
 
 @Component({
-  selector: 'ag-extension-hyperlink',
+  selector: 'r-extension-hyperlink',
   templateUrl: './extension-hyperlink.component.html',
   styleUrls: ['./extension-hyperlink.component.css']
 })
-export class ExtensionHyperlinkComponent implements OnInit {
+export class ExtensionHyperlinkComponent {
   @Input()
   public disabled: boolean;
   @Input()
@@ -14,16 +14,25 @@ export class ExtensionHyperlinkComponent implements OnInit {
   @Input()
   public text: string;
 
-  constructor(public tabManagerService:TabManagerService) { }
+  @Input()
+  public isImg: boolean = false;
+  @Input()
+  public alt: string;
+  @Input()
+  public src: string;
+  @Input()
+  public imgStyle: string;
 
-  ngOnInit(): void {
+
+  constructor(public tabManagerService: TabManagerService) {
   }
 
-  public openTab(){
-    if(this.disabled || !this.url)
+  public openTab() {
+    if (this.disabled || !this.url) {
       return;
+    }
 
-    if(this.url.length > 0){
+    if (this.url.length > 0) {
       this.tabManagerService.openTab(this.url);
     }
   }

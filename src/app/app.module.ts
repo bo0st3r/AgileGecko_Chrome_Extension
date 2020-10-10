@@ -9,7 +9,7 @@ import {MatchCoinPipe} from './coingecko/pipe/matching-coin.pipe';
 import {CoinSearchComponent} from './coingecko/component/coin-search/coin-search.component';
 import {EthereumScannerComponent} from './chain-explorer/component/ethereum-scanner/ethereum-scanner.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {InfoFooterComponent} from './layout/component/info-footer/info-footer.component';
+import {FooterComponent} from './layout/component/footer/footer.component';
 import {TooltipModule} from 'primeng/tooltip';
 import {InputTextModule} from 'primeng/inputtext';
 import {TableModule} from 'primeng/table';
@@ -17,6 +17,7 @@ import {TabViewModule} from 'primeng/tabview';
 import {DialogModule} from 'primeng/dialog';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import {ExtensionHyperlinkComponent} from './small-component/component/extension-hyperlink/extension-hyperlink.component';
+import { HeaderComponent } from './layout/component/header/header.component';
 
 @NgModule({
   declarations: [
@@ -25,8 +26,9 @@ import {ExtensionHyperlinkComponent} from './small-component/component/extension
     MatchCoinPipe,
     CoinSearchComponent,
     EthereumScannerComponent,
-    InfoFooterComponent,
+    FooterComponent,
     ExtensionHyperlinkComponent,
+    HeaderComponent,
   ],
   imports: [
     TooltipModule,

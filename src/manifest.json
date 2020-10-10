@@ -8,13 +8,8 @@
     "webRequest",
     "webNavigation",
     "tabs",
-    "cookies",
-    "background",
     "browsingData",
-    "clipboardRead",
-    "<all_urls>",
-    "https://*/",
-    "https://api.coingecko.com/api/v3/*"
+    "clipboardRead"
   ],
   "browser_action": {
     "default_popup": "index.html"
@@ -25,7 +20,6 @@
         "https://api.coingecko.com/api/v3/*"
       ],
       "js": [
-        "scripts/fetcher.js",
         "scripts/util.js"
       ],
       "run_at": "document_end"

@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CoinDto} from '../../dto/coin-dto';
 import {Subscription} from 'rxjs';
-import {TabManagerService} from '../../../chrome/util/tab-manager.service';
+import {TabManagerService} from '../../../chrome/util/tab/tab-manager.service';
 import {FavoriteManagerService} from '../../../layout/service/favorite-manager.service';
 import {LocalStorageManagerService} from '../../../chrome/util/storage/local-storage-manager.service';
 import {MatchCoinPipe} from '../../pipe/matching-coin.pipe';
@@ -10,7 +10,7 @@ import {Url} from 'src/app/coingecko/enum/url.enum';
 import {CoinGeckoRepositoryService} from '../../service/repository/coin-gecko-repository.service';
 
 @Component({
-  selector: 'app-coin-search',
+  selector: 'r-coin-search',
   templateUrl: './coin-search.component.html',
   styleUrls: ['./coin-search.component.css']
 })

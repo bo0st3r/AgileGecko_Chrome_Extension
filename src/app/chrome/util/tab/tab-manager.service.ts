@@ -1,21 +1,21 @@
-import { Injectable } from '@angular/core';
-import id = chrome.runtime.id;
-import {logger} from 'codelyzer/util/logger';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 /**
- * Manages tabs in Chrome.
+ * Manage tabs in Chrome.
  */
 export class TabManagerService {
 
-  constructor() { }
+  constructor() {
+  }
 
   /**
-   * Opens a new tab in the explorer, adds a suffix if given.
+   * Open a new tab in the browser.
    */
   public openTab(url: string): void {
-    chrome.tabs.create({url}, () => {});
+    chrome.tabs.create({url}, () => {
+    });
   }
 }

@@ -1,15 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {TabManagerService} from '../../../chrome/util/tab/tab-manager.service';
-import {Url} from '../../../coingecko/enum/url.enum';
-import {HttpClient} from '@angular/common/http';
-import {logger} from 'codelyzer/util/logger';
+import {Url} from '../../../coin-market/enum/url.enum';
 
 @Component({
   selector: 'r-ethereum-scanner',
   templateUrl: './ethereum-scanner.component.html',
   styleUrls: ['./ethereum-scanner.component.css']
 })
-export class EthereumScannerComponent implements OnInit {
+export class EthereumScannerComponent {
   public Url = Url;
   public ADDRESS_PREFIX = 'address/';
   public TOKEN_PREFIX = 'token/';
@@ -23,23 +21,16 @@ export class EthereumScannerComponent implements OnInit {
   public TOKEN_HOLDERS_SUFFIX = '#balances';
   public TOKEN_WRITE_CONTRACT_SUFFIX = '#writeContract';
   public TOKEN_READ_CONTRACT_SUFFIX = '#readContract';
-
+  public searchValue = '';
+  public searchingAddress: boolean;
+  public searchingTx: boolean;
+  public searchingBlock: boolean;
   private ADDRESS_MIN_LENGTH = 40;
   private ADDRESS_MAX_LENGTH = 42;
   private TRANSACTION_MIN_LENGTH = 64;
   private TRANSACTION_MAX_LENGTH = 66;
 
-  public searchValue = '';
-  public searchingAddress: boolean;
-  public searchingTx: boolean;
-  public searchingBlock: boolean;
-
-
-
   constructor(public tabManagerService: TabManagerService) {
-  }
-
-  ngOnInit(): void {
   }
 
   public urlTokenResearch(): string {
@@ -58,15 +49,17 @@ export class EthereumScannerComponent implements OnInit {
     return Url.ETHERSCAN_ADDRESS + this.TRANSACTION_PREFIX + this.normalizedSearchValue();
   }
 
-  public normalizedSearchValue(): string{
-    if(this.searchValue.length === 0)
+  public normalizedSearchValue(): string {
+    if (this.searchValue.length === 0) {
       return '';
+    }
 
     const length = this.searchValue.length;
-    if([this.TRANSACTION_MIN_LENGTH, this.TRANSACTION_MIN_LENGTH + 1].includes(length))
+    if ([this.TRANSACTION_MIN_LENGTH, this.TRANSACTION_MIN_LENGTH + 1].includes(length)) {
       return this.searchValue.padStart(this.TRANSACTION_MAX_LENGTH, '0x');
-    else if([this.ADDRESS_MIN_LENGTH, this.ADDRESS_MIN_LENGTH + 1].includes(length))
+    } else if ([this.ADDRESS_MIN_LENGTH, this.ADDRESS_MIN_LENGTH + 1].includes(length)) {
       return this.searchValue.padStart(this.ADDRESS_MAX_LENGTH, '0x');
+    }
 
     return this.searchValue;
   }

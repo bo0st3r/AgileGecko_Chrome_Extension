@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
-import {CoinDto} from '../../coingecko/dto/coin-dto';
+import {CoinDto} from '../../coin-market/dto/coin-dto';
 import {Observable, Subject} from 'rxjs';
 import {LocalStorageManagerService} from '../../chrome/util/storage/local-storage-manager.service';
-import {errorObject} from 'rxjs/internal-compatibility';
-import {error} from '@angular/compiler/src/util';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +38,7 @@ export class FavoriteManagerService {
    */
   constructor(public localStorageManager: LocalStorageManagerService) {
     this._favoriteCoins = this.localStorageManager.find(this.LOCAL_STORAGE_KEY);
-    if(!this._favoriteCoins || this._favoriteCoins.length === 0){
+    if (!this._favoriteCoins || this._favoriteCoins.length === 0) {
       this.loadDefaultFavorites();
     }
   }
@@ -64,7 +62,7 @@ export class FavoriteManagerService {
     const foundCoin = this._favoriteCoins.find(value => value.id === coin.id);
     const indexOfCoin = this._favoriteCoins.indexOf(foundCoin);
     if (indexOfCoin >= 0) {
-      const a = this._favoriteCoins.splice(indexOfCoin, 1);
+      this._favoriteCoins.splice(indexOfCoin, 1);
     } else {
       this._favoriteCoins.push(coin);
     }
@@ -78,7 +76,7 @@ export class FavoriteManagerService {
       this._favoriteCoins = this._defaultFavorites;
       this.notify();
     } else {
-      console.error(`Tried to load empty default favorites.`)
+      console.error(`Tried to load empty default favorites.`);
     }
   }
 

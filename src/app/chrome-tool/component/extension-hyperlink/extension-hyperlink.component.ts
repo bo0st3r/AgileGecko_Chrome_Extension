@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {TabManagerService} from '../../../chrome/util/tab/tab-manager.service';
 
 @Component({
@@ -6,34 +6,31 @@ import {TabManagerService} from '../../../chrome/util/tab/tab-manager.service';
   templateUrl: './extension-hyperlink.component.html',
   styleUrls: ['./extension-hyperlink.component.css']
 })
+/**
+ * Hyperlink for Chrome extensions as a text or image.
+ *
+ * To use as an image, must
+ */
 export class ExtensionHyperlinkComponent {
   @Input()
   public disabled: boolean;
   @Input()
-  public url: string;
-  @Input()
-  public text: string;
-
-  @Input()
-  public isImg: boolean = false;
-  @Input()
-  public alt: string;
-  @Input()
-  public src: string;
-  @Input()
-  public imgStyle: string;
-
+  public href: string;
 
   constructor(public tabManagerService: TabManagerService) {
   }
 
+  /**
+   * Opens a tab if {@link href} is set.
+   */
   public openTab() {
-    if (this.disabled || !this.url) {
+    if (this.disabled || !this.href) {
       return;
     }
 
-    if (this.url.length > 0) {
-      this.tabManagerService.openTab(this.url);
+    if (this.href.length > 0) {
+      this.tabManagerService.openTab(this.href);
     }
   }
 }
+

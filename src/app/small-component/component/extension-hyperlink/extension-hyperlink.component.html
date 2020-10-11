@@ -1,8 +1,0 @@
-<a id="a" (click)="openTab()" class="hyperlink" [class.opacity-3]="disabled">
-  <div *ngIf="isImg; else notImage;">
-    {{text}}
-  </div>
-  <div #notImage>
-    <img [src]="src" [alt]="alt" [style]="imgStyle">
-  </div>
-</a>

@@ -1,9 +1,10 @@
 <div class="container-xs bg-gradient-main p-2 panel-min-height">
   <div class="row justify-content-start pl-2 pt-2">
     <div class="col-2">
-      <r-extension-hyperlink isImg="true" [src]="'assets\\img\\etherscan_logo.svg'" url="https://www.etherscan.com/"
-                             alt="Etherscan logo" class="img-fluid pr-3"
-                             imgStyle="max-width:50px;"></r-extension-hyperlink>
+      <r-extension-hyperlink class="img-fluid pr-3" href="https://www.etherscan.com/" pTooltip="Open Etherscan"
+                             tooltipPosition="bottom">
+        <img alt="Etherscan logo" src="assets\img\etherscan_logo.svg" style="max-width:50px;"/>
+      </r-extension-hyperlink>
     </div>
   </div>
 
@@ -12,9 +13,9 @@
     <div class="col justify-content-center mx-2 p-inputgroup p-placeholder">
       <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
       <input
-        [(ngModel)]="searchValue" (ngModelChange)="updateSearchingBools($event)" autocomplete="off" coin
-        id="address-searched" pInputText placeholder="Address, contract, tx, ..."
-        type=text autofocus>
+        (ngModelChange)="updateSearchingBools($event)" [(ngModel)]="searchValue" autocomplete="off" autofocus
+        coin id="address-searched" pInputText label="Name or symbol"
+        placeholder="Address, contract, tx, ..." type=text>
     </div>
   </div>
 
@@ -22,42 +23,45 @@
     <div class="col mx-3" id="eth-scanner-links">
       <div class="row">
         <div class="col-4">
-          <r-extension-hyperlink [url]="urlAddressResearch()"
-                                 class="d-block" [disabled]="!searchingAddress" text="Address">
+          <r-extension-hyperlink [disabled]="!searchingAddress"
+                                 [href]="urlAddressResearch()" class="d-block"> Address
           </r-extension-hyperlink>
-          <r-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_ERC20_TXNS_SUFFIX"
-                                 class="d-block ml-1" [disabled]="!searchingAddress" text="ERC20 Txns">
+          <r-extension-hyperlink [disabled]="!searchingAddress"
+                                 [href]="urlAddressResearch() + ADDRESS_ERC20_TXNS_SUFFIX" class="d-block ml-1">ERC20
+            Txns
           </r-extension-hyperlink>
-          <r-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_INTERNAL_TXNS_SUFFIX"
-                                 class="d-block ml-1" [disabled]="!searchingAddress" text="Internal Txns">
+          <r-extension-hyperlink [disabled]="!searchingAddress"
+                                 [href]="urlAddressResearch() + ADDRESS_INTERNAL_TXNS_SUFFIX" class="d-block ml-1">
+            Internal Txns
           </r-extension-hyperlink>
-          <r-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_CONTRACT_SUFFIX"
-                                 class="d-block ml-1" [disabled]="!searchingAddress" text="Contract">
+          <r-extension-hyperlink [disabled]="!searchingAddress"
+                                 [href]="urlAddressResearch() + ADDRESS_CONTRACT_SUFFIX" class="d-block ml-1"> Contract
           </r-extension-hyperlink>
-          <r-extension-hyperlink [url]="urlAddressResearch() + ADDRESS_LOANS_SUFFIX"
-                                 class="d-block ml-1" [disabled]="!searchingAddress" text="Loans">
-          </r-extension-hyperlink>
-        </div>
-        <div class="col-4">
-          <r-extension-hyperlink [url]="urlTokenResearch()"
-                                 class="d-block" [disabled]="!searchingAddress" text="Token">
-          </r-extension-hyperlink>
-          <r-extension-hyperlink [url]="urlTokenResearch() + TOKEN_HOLDERS_SUFFIX"
-                                 class="d-block ml-1" [disabled]="!searchingAddress" text="Holders">
-          </r-extension-hyperlink>
-          <r-extension-hyperlink [url]="urlTokenResearch() + TOKEN_WRITE_CONTRACT_SUFFIX"
-                                 class="d-block ml-1" [disabled]="!searchingAddress" text="Write Contract">
-          </r-extension-hyperlink>
-          <r-extension-hyperlink [url]="urlTokenResearch() + TOKEN_READ_CONTRACT_SUFFIX"
-                                 class="d-block ml-1" [disabled]="!searchingAddress" text="Read Contract">
+          <r-extension-hyperlink [disabled]="!searchingAddress"
+                                 [href]="urlAddressResearch() + ADDRESS_LOANS_SUFFIX" class="d-block ml-1"> Loans
           </r-extension-hyperlink>
         </div>
         <div class="col-4">
-          <r-extension-hyperlink [url]="urlTransactionResearch()"
-                                 class="d-block" [disabled]="!searchingTx" text="Transaction">
+          <r-extension-hyperlink [disabled]="!searchingAddress" [href]="urlTokenResearch()" class="d-block"> Token
           </r-extension-hyperlink>
-          <r-extension-hyperlink [url]="urlBlockResearch()"
-                                 class="d-block" [disabled]="!searchingBlock" text="Block">
+          <r-extension-hyperlink [disabled]="!searchingAddress"
+                                 [href]="urlTokenResearch() + TOKEN_HOLDERS_SUFFIX" class="d-block ml-1"> Holders
+          </r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingAddress"
+                                 [href]="urlTokenResearch() + TOKEN_WRITE_CONTRACT_SUFFIX" class="d-block ml-1">Write
+            Contract
+          </r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingAddress"
+                                 [href]="urlTokenResearch() + TOKEN_READ_CONTRACT_SUFFIX" class="d-block ml-1">Read
+            Contract
+          </r-extension-hyperlink>
+        </div>
+        <div class="col-4">
+          <r-extension-hyperlink [disabled]="!searchingTx"
+                                 [href]="urlTransactionResearch()" class="d-block"> Transaction
+          </r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingBlock"
+                                 [href]="urlBlockResearch()" class="d-block"> Block
           </r-extension-hyperlink>
         </div>
       </div>

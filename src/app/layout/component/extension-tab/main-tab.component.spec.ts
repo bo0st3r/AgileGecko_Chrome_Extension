@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExtensionTabComponent } from './extension-tab.component';
+import { MainTabComponent } from './main-tab.component';
 
 describe('ExtensionTabComponent', () => {
-  let component: ExtensionTabComponent;
-  let fixture: ComponentFixture<ExtensionTabComponent>;
+  let component: MainTabComponent;
+  let fixture: ComponentFixture<MainTabComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExtensionTabComponent ]
+      declarations: [ MainTabComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExtensionTabComponent);
+    fixture = TestBed.createComponent(MainTabComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

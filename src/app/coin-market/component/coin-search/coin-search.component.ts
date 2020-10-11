@@ -6,7 +6,7 @@ import {FavoriteManagerService} from '../../../layout/service/favorite-manager.s
 import {LocalStorageManagerService} from '../../../chrome/util/storage/local-storage-manager.service';
 import {MatchCoinPipe} from '../../pipe/matching-coin.pipe';
 import {LocalStorageKey} from '../../enum/key.enum';
-import {Url} from 'src/app/coingecko/enum/url.enum';
+import {Url} from 'src/app/coin-market/enum/url.enum';
 import {CoinGeckoRepositoryService} from '../../service/repository/coin-gecko-repository.service';
 
 @Component({
@@ -120,7 +120,7 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
   /**
    * Check if the favoriteCoins list contains the given coin.
    * It does so by using the 'some' method and comparing coin's IDs instead of using the 'includes' method,
-   * because it is comparing a {@link CoinDTO} object to a list of JSON objects.
+   * because it is comparing a {@link CoinDto} object to a list of JSON objects.
    * @param coin the coin to compare
    */
   public favoriteCoinsContains(coin: CoinDto): boolean {

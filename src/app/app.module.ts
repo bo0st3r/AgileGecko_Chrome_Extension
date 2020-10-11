@@ -2,11 +2,11 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {ExtensionTabComponent} from './layout/component/extension-tab/extension-tab.component';
+import {MainTabComponent} from './layout/component/extension-tab/main-tab.component';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
-import {MatchCoinPipe} from './coingecko/pipe/matching-coin.pipe';
-import {CoinSearchComponent} from './coingecko/component/coin-search/coin-search.component';
+import {MatchCoinPipe} from './coin-market/pipe/matching-coin.pipe';
+import {CoinSearchComponent} from './coin-market/component/coin-search/coin-search.component';
 import {EthereumScannerComponent} from './chain-explorer/component/ethereum-scanner/ethereum-scanner.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FooterComponent} from './layout/component/footer/footer.component';
@@ -16,13 +16,13 @@ import {TableModule} from 'primeng/table';
 import {TabViewModule} from 'primeng/tabview';
 import {DialogModule} from 'primeng/dialog';
 import {RadioButtonModule} from 'primeng/radiobutton';
-import {ExtensionHyperlinkComponent} from './small-component/component/extension-hyperlink/extension-hyperlink.component';
-import { HeaderComponent } from './layout/component/header/header.component';
+import {ExtensionHyperlinkComponent} from './chrome-tool/component/extension-hyperlink/extension-hyperlink.component';
+import {HeaderComponent} from './layout/component/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ExtensionTabComponent,
+    MainTabComponent,
     MatchCoinPipe,
     CoinSearchComponent,
     EthereumScannerComponent,

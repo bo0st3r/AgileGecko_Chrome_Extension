@@ -108,10 +108,17 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    * @see searchedCoin
    */
   public updateDisplayedCoins(): void {
-    if (this.coins.length > 0 && this.searchedCoin.length > 0) {
+    console.log('coins length: ' + this.coins.length);
+    console.log('searchedCoin length: ' + this.searchedCoin.length);
+    console.log('favoriteCoins length: ' + this.favoriteCoins.length);
+    if (this.coins.length > 0 && this.searchedCoin.length > 1) {
       this.displayedCoins = this.matchCoinPipe.transform(this.coins, this.searchedCoin);
     } else if (this.favoriteCoins.length > 0) {
-      this.displayedCoins = this.matchCoinPipe.transform(this.favoriteCoins, this.searchedCoin);
+      if (this.searchedCoin.length > 1) {
+        this.displayedCoins = this.matchCoinPipe.transform(this.favoriteCoins, this.searchedCoin);
+      } else {
+        this.displayedCoins = this.favoriteCoins;
+      }
     } else {
       this.displayedCoins = new Array<CoinDto>();
     }
@@ -119,9 +126,8 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
 
   /**
    * Check if the favoriteCoins list contains the given coin.
-   * It does so by using the 'some' method and comparing coin's IDs instead of using the 'includes' method,
-   * because it is comparing a {@link CoinDto} object to a list of JSON objects.
-   * @param coin the coin to compare
+   * Compare with the 'some' method and by providing coins' IDs.
+   * @param coin coin to compare
    */
   public favoriteCoinsContains(coin: CoinDto): boolean {
     return this.favoriteCoins.some(value => value.id === coin.id);

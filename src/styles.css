@@ -16,11 +16,6 @@ html[theme='dark-mode'] img {
   filter: invert(0.9) hue-rotate(180deg);
 }
 
-/*.p-datatable-scrollable-header-box {*/
-/*  padding-right: 0 !important;*/
-/*}*/
-
-
 /****************************************************
                       Miscellaneous
 *****************************************************/
@@ -50,7 +45,6 @@ html[theme='dark-mode'] img {
 *****************************************************/
 .bg-gradient-main {
   /*background: linear-gradient(173deg, rgba(65, 128, 255, 1) 0%, rgba(203, 29, 114, 1) 100%) !important;*/
-  /*background: rgba(0, 0, 0, 0.08);*/
   background: #f0f0f0;
 }
 
@@ -95,11 +89,8 @@ html[theme='dark-mode'] img {
 /****************************************************
                       PrimeNG
 *****************************************************/
-/* All components */
-.p-component {
-}
 
-/* TabView */
+/** TabView **/
 .p-tabview-panels {
   padding: 0 !important;
 }
@@ -108,13 +99,13 @@ html[theme='dark-mode'] img {
   min-height: 440px;
 }
 
-/* Dialog */
+/** Dialog **/
 .loading-error-dialog {
   width: 83%;
 }
 
-/* Table */
-.p-datatable-striped {
-  /*background:  ;*/
+/** Table **/
+/* Striped table - even rows */
+.p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
+  background-color: #f3f3f3 !important;
 }
-

@@ -1,47 +1,49 @@
 <!--Error dialog-->
-<p-dialog [(visible)]="coinsLoadingFailed" [closeOnEscape]="true"
-          [dismissableMask]="true" [draggable]="false"
-          [modal]="true" header="Coin list not found" styleClass="loading-error-dialog">
-  We couldn't load the coins list, please check your Internet access or try later.
-</p-dialog>
+<ng-container *ngIf="coinsLoadingFailed">
+  <p-dialog [(visible)]="coinsLoadingFailed" [closeOnEscape]="true"
+            [dismissableMask]="true" [draggable]="false"
+            [modal]="true" header="Coin list not found" styleClass="loading-error-dialog" visible="true">
+    We couldn't load the coins list, please check your Internet access or try later.
+  </p-dialog>
+</ng-container>
 
 <!--Content-->
 <div class="container-xs bg-gradient-main p-2">
-  <div class="row justify-content-end pr-2 pt-1">
-    <div class="col-2">
-      <r-extension-hyperlink class="img-fluid pr-3" href="https://www.coingecko.com/" pTooltip="Open CoinGecko"
+  <!--  Coingecko Logo-->
+  <div class="row justify-content-center my-3 mb-4">
+    <div class="col-2 text-center">
+      <r-extension-hyperlink class="img-fluid" href="https://www.coingecko.com/" pTooltip="Open CoinGecko"
                              tooltipPosition="bottom">
         <img alt="CoinGecko logo" src="assets\img\coingecko_logo.svg" style="max-width:50px;"/>
       </r-extension-hyperlink>
     </div>
-  </div>
 
-  <div class="row mb-3 mt-3 justify-content-center">
-    <!--    Search input-->
+    <!--  Coin search input-->
     <div class="col-9 justify-content-center p-inputgroup">
       <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
-      <input (keydown.enter)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + selectedCoin.id.toString())"
-             (ngModelChange)="updateDisplayedCoins()" [(ngModel)]="searchedCoin" autocomplete="off"
+      <input (input)="updateDisplayedCoins()"
+             (keydown.enter)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + selectedCoin.id.toString())"
+             [(ngModel)]="searchedCoin" autocomplete="off"
              autofocus
              id="coin-searched" label="Name or symbol" pInputText
              placeholder="Name or symbol" type="text">
     </div>
   </div>
 
+  <!--  Coin list table-->
   <div class="row justify-content-center">
     <div class="col-12">
-      <!--    Results-->
       <p-table [rows]="6" [scrollable]="true" [value]="displayedCoins"
                [virtualRowHeight]="6" [virtualScroll]="true" scrollHeight="286px" styleClass="p-datatable-striped">
+        <!--        Header-->
         <ng-template pTemplate="header">
-          <tr *ngIf="displayedCoins && displayedCoins.length > 0; then listSet else listUnset;"></tr>
-          <ng-template #listSet>
+          <ng-container *ngIf="displayedCoins && displayedCoins.length > 0; else listUnset;">
             <tr>
-              <th style="width:22.5%">Symbol</th>
-              <th style="width:61.5%">Name</th>
+              <th style="width:23%">Symbol</th>
+              <th style="width:61%">Name</th>
               <th style="width:16%"></th>
             </tr>
-          </ng-template>
+          </ng-container>
           <ng-template #listUnset>
             <tr>
               <th>
@@ -50,14 +52,16 @@
             </tr>
           </ng-template>
         </ng-template>
+
+        <!--        Rows-->
         <ng-template let-coin pTemplate="body">
-          <tr [pSelectableRow]="coin">
+          <tr>
             <!--            Coin symbol-->
-            <td style="width:22.5%">
-              <p class="d-inline mr-2 font-weight-bold">{{coin.symbol | uppercase}}</p>
+            <td style="width:23%">
+              <p class="d-inline font-weight-bold">{{coin.symbol | uppercase}}</p>
             </td>
             <!--            Coin name-->
-            <td style="width:61.5%">
+            <td style="width:61%">
               <a (click)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + coin.id)"
                  class="mr-2 hyperlink" pTooltip="View on CG" tooltipPosition="bottom">{{coin.name}}</a>
             </td>

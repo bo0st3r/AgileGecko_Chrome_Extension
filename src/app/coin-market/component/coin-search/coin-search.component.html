@@ -10,31 +10,29 @@
 <!--Content-->
 <div class="container-xs bg-gradient-main p-2">
   <!--  Coingecko Logo-->
-  <div class="row justify-content-center my-3 mb-4">
+  <div class="row justify-content-center mt-3 mb-4">
     <div class="col-2 text-center">
-      <r-extension-hyperlink class="img-fluid" href="https://www.coingecko.com/" pTooltip="Open CoinGecko"
-                             tooltipPosition="bottom">
-        <img alt="CoinGecko logo" src="assets\img\coingecko_logo.svg" style="max-width:50px;"/>
+      <r-extension-hyperlink class="img-fluid" href="https://www.coingecko.com/"
+                             pTooltip="Open CoinGecko" tooltipPosition="bottom">
+        <img alt="CoinGecko logo" src="assets\img\coingecko_logo.svg" style="width:50px;"/>
       </r-extension-hyperlink>
     </div>
 
     <!--  Coin search input-->
-    <div class="col-9 justify-content-center p-inputgroup">
+    <div class="col-9 p-inputgroup align-self-center" style="height: 3em;">
       <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
       <input (input)="updateDisplayedCoins()"
              (keydown.enter)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + selectedCoin.id.toString())"
-             [(ngModel)]="searchedCoin" autocomplete="off"
-             autofocus
-             id="coin-searched" label="Name or symbol" pInputText
-             placeholder="Name or symbol" type="text">
+             [(ngModel)]="searchedCoin" autocomplete="off" autofocus id="coin-searched" label="Name or symbol"
+             pInputText placeholder="Name or symbol" type="text">
     </div>
   </div>
 
   <!--  Coin list table-->
   <div class="row justify-content-center">
     <div class="col-12">
-      <p-table [rows]="6" [scrollable]="true" [value]="displayedCoins"
-               [virtualRowHeight]="6" [virtualScroll]="true" scrollHeight="286px" styleClass="p-datatable-striped">
+      <p-table [rows]="6" [scrollable]="true" [value]="displayedCoins" [virtualRowHeight]="6" [virtualScroll]="true"
+               scrollHeight="286px" styleClass="p-datatable-striped">
         <!--        Header-->
         <ng-template pTemplate="header">
           <ng-container *ngIf="displayedCoins && displayedCoins.length > 0; else listUnset;">

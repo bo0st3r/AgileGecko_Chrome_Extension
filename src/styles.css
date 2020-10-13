@@ -75,6 +75,10 @@ html[theme='dark-mode'] img {
 /****************************************************
                       Text
 *****************************************************/
+.txt-md {
+  font-size: 1.1em;
+}
+
 .hyperlink {
   color: #589bf1 !important;
   font-weight: bold;

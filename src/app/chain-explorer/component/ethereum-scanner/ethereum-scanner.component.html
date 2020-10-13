@@ -1,15 +1,15 @@
 <div class="container-xs bg-gradient-main p-2 panel-min-height">
 
-  <div class="row justify-content-center mt-3 mb-5">
+  <div class="row justify-content-center mt-3 mb-4">
     <div class="col-2 text-center">
       <r-extension-hyperlink class="img-fluid pr-3" href="https://www.etherscan.com/" pTooltip="Open Etherscan"
                              tooltipPosition="bottom">
-        <img alt="Etherscan logo" src="assets\img\etherscan_logo.svg" style="max-width:50px;"/>
+        <img alt="Etherscan logo" src="assets\img\etherscan_logo.svg" style="width:50px;"/>
       </r-extension-hyperlink>
     </div>
 
     <!--    Search input-->
-    <div class="col-9 justify-content-center p-inputgroup p-placeholder">
+    <div class="col-9 p-inputgroup align-self-center" style="height: 3em;">
       <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
       <input
         (ngModelChange)="updateSearchingBools($event)" [(ngModel)]="searchValue" autocomplete="off" autofocus

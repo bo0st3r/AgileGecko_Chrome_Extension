@@ -23,12 +23,13 @@ import {HeaderComponent} from './layout/component/header/header.component';
   declarations: [
     AppComponent,
     MainTabComponent,
-    MatchCoinPipe,
     CoinSearchComponent,
     EthereumScannerComponent,
     FooterComponent,
     ExtensionHyperlinkComponent,
     HeaderComponent,
+
+    MatchCoinPipe,
   ],
   imports: [
     TooltipModule,

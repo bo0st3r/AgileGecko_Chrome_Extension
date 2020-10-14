@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {CoinDto} from '../../dto/coin-dto';
-import {environment} from '../../../../environments/environment';
 import {Observable} from 'rxjs';
 import {retry} from 'rxjs/operators';
+import {coingecko} from '../../../../constants/coingecko';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class CoinGeckoRepositoryService {
   constructor(public httpClient: HttpClient) {
   }
 
-  public fetchCoinList(): Observable<HttpResponse<CoinDto[]>> {
-    return this.httpClient.get<CoinDto[]>(environment.coingecko_api + this.COIN_LIST_SUFFIX, {observe: 'response'}).pipe(retry(3));
+  public fetchCoins(): Observable<HttpResponse<CoinDto[]>> {
+    return this.httpClient.get<CoinDto[]>(coingecko.API.HOST + this.COIN_LIST_SUFFIX, {observe: 'response'}).pipe(retry(3));
   }
 }

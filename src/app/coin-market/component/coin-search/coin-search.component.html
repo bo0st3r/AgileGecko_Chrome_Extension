@@ -9,20 +9,19 @@
 
 <!--Content-->
 <div class="container-xs bg-gradient-main p-2">
-  <!--  Coingecko Logo-->
-  <div class="row justify-content-center mt-3 mb-4">
-    <div class="col-2 text-center">
-      <r-extension-hyperlink class="img-fluid" href="https://www.coingecko.com/"
-                             pTooltip="Open CoinGecko" tooltipPosition="bottom">
-        <img alt="CoinGecko logo" src="assets\img\coingecko_logo.svg" style="width:50px;"/>
+  <div class="row my-4 mx-3 no-gutters">
+    <!--  Coingecko Logo-->
+    <div class="col-2">
+      <r-extension-hyperlink class="img" href="https://www.coingecko.com/">
+        <img alt="CoinGecko logo" src="assets\img\coingecko_logo.svg" style="width:50px;" pTooltip="Open CoinGecko" tooltipPosition="bottom"/>
       </r-extension-hyperlink>
     </div>
 
     <!--  Coin search input-->
-    <div class="col-9 p-inputgroup align-self-center" style="height: 3em;">
+    <div class="col-10 p-inputgroup align-self-center" style="height: 3em;">
       <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
       <input (input)="updateDisplayedCoins()"
-             (keydown.enter)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + selectedCoin.id.toString())"
+             (keydown.enter)="tabManagerService.openTab(coingecko.TABS.COIN_PAGE + selectedCoin.id.toString())"
              [(ngModel)]="searchedCoin" autocomplete="off" autofocus id="coin-searched" label="Name or symbol"
              pInputText placeholder="Name or symbol" type="text">
     </div>
@@ -60,17 +59,22 @@
             </td>
             <!--            Coin name-->
             <td style="width:61%">
-              <a (click)="tabManagerService.openTab(Url.COINGECKO_COIN_PREFIX + coin.id)"
-                 class="mr-2 hyperlink" pTooltip="View on CG" tooltipPosition="bottom">{{coin.name}}</a>
+              <a (click)="tabManagerService.openTab(coingecko.TABS.COIN_PAGE + coin.id)"
+                 class="hyperlink" pTooltip="View on CG" tooltipPosition="bottom">{{coin.name}}</a>
             </td>
-            <!--          ChartEx link & Favorite Icon -->
-            <td class="text-center align-middle" style="width:16%">
-              <i (click)="tabManagerService.openTab(Url.CHARTEX_PAIR_PREFIX + coin.symbol.toUpperCase())"
-                 class="pi pi-chart-line mr-2 chart-icon" pTooltip="Chart" tooltipPosition="bottom"></i>
-              <i (click)="favoriteManagerService.updateAndSaveFavorite(coin)"
-                 [ngClass]="(favoriteCoinsContains(coin)) ? 'favorite-icon' : 'not-favorite-icon'"
-                 class="pi pi-star font-weight-bold"
-                 pTooltip="Favorite" tooltipPosition="bottom"></i>
+            <!--          Icons -->
+            <td class=" align-middle px-1" style="width:16%">
+              <div class="d-flex justify-content-around">
+<!--                ChartEx-->
+                <i (click)="tabManagerService.openTab(chartex.PAIR.URL + coin.symbol.toUpperCase());"
+                   class="pi pi-chart-line chart-icon"
+                   pTooltip="Chart" tooltipPosition="bottom" showDelay="100"></i>
+<!--                Favorite-->
+                <i (click)="favoriteManagerService.updateAndSaveFavorite(coin)"
+                   [ngClass]="(favoriteCoinsContains(coin)) ? 'favorite-icon' : 'not-favorite-icon'"
+                   class="pi pi-star font-weight-bold"
+                   pTooltip="Favorite" tooltipPosition="bottom" showDelay="150"></i>
+              </div>
             </td>
           </tr>
         </ng-template>

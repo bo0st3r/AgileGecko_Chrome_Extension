@@ -5,9 +5,9 @@ import {TabManagerService} from '../../../chrome/util/tab/tab-manager.service';
 import {FavoriteManagerService} from '../../../layout/service/favorite-manager.service';
 import {LocalStorageManagerService} from '../../../chrome/util/storage/local-storage-manager.service';
 import {MatchCoinPipe} from '../../pipe/matching-coin.pipe';
-import {LocalStorageKey} from '../../enum/key.enum';
-import {Url} from 'src/app/coin-market/enum/url.enum';
 import {CoinGeckoRepositoryService} from '../../service/repository/coin-gecko-repository.service';
+import {coingecko} from '../../../../constants/coingecko';
+import {chartex} from '../../../../constants/chartex';
 
 @Component({
   selector: 'r-coin-search',
@@ -43,10 +43,9 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    * If the loading fails, this field is set to true.
    */
   public coinsLoadingFailed: boolean;
-  /**
-   * Instance of the {@link Url} enum.
-   */
-  public Url = Url;
+  // Constants
+  public coingecko = coingecko;
+  public chartex = chartex;
 
   constructor(
     public tabManagerService: TabManagerService,
@@ -77,18 +76,17 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Unsubscribe from {@link favoriteCoinsSubscription} and deletes value for {@link LocalStorageKey.COINS_LIST}.
+   * Unsubscribe from {@link favoriteCoinsSubscription}.
    */
   ngOnDestroy(): void {
     this.favoriteCoinsSubscription.unsubscribe();
-    this.localStorageManagerService.delete(LocalStorageKey.COINS_LIST);
   }
 
   /**
    * Fetch the coin list with {@link CoinGeckoRepositoryService} and update {@link coinsLoadingFailed}.
    */
   public fetchAndUpdateCoins(): void {
-    this.coinGeckoRepositoryService.fetchCoinList().subscribe(coinsResponse => {
+    this.coinGeckoRepositoryService.fetchCoins().subscribe(coinsResponse => {
       if (coinsResponse.body) {
         this.coins = coinsResponse.body;
         this.coinsLoadingFailed = false;
@@ -131,5 +129,10 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    */
   public favoriteCoinsContains(coin: CoinDto): boolean {
     return this.favoriteCoins.some(value => value.id === coin.id);
+  }
+
+  log(s: string) {
+    console.log(s);
+
   }
 }

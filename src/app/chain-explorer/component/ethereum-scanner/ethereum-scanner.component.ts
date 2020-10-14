@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
-import {TabManagerService} from '../../../chrome/util/tab/tab-manager.service';
-import {Url} from '../../../coin-market/enum/url.enum';
+import {etherscan} from '../../../../constants/etherscan';
 
 @Component({
   selector: 'r-ethereum-scanner',
@@ -8,67 +7,70 @@ import {Url} from '../../../coin-market/enum/url.enum';
   styleUrls: ['./ethereum-scanner.component.css']
 })
 export class EthereumScannerComponent {
-  public Url = Url;
-  public ADDRESS_PREFIX = 'address/';
-  public TOKEN_PREFIX = 'token/';
-  public TRANSACTION_PREFIX = 'tx/';
-  public BLOCK_PREFIX = 'block/';
-
-  public ADDRESS_CONTRACT_SUFFIX = '#code';
-  public ADDRESS_INTERNAL_TXNS_SUFFIX = '#internaltx';
-  public ADDRESS_ERC20_TXNS_SUFFIX = '#tokentxns';
-  public ADDRESS_LOANS_SUFFIX = '#loansAddress';
-  public TOKEN_HOLDERS_SUFFIX = '#balances';
-  public TOKEN_WRITE_CONTRACT_SUFFIX = '#writeContract';
-  public TOKEN_READ_CONTRACT_SUFFIX = '#readContract';
+  /**
+   * Value searched by user.
+   */
   public searchValue = '';
+  /**
+   * User searching for an address.
+   */
   public searchingAddress: boolean;
+  /**
+   * User searching for a transaction.
+   */
   public searchingTx: boolean;
+  /**
+   * User searching for a block.
+   */
   public searchingBlock: boolean;
-  private ADDRESS_MIN_LENGTH = 40;
-  private ADDRESS_MAX_LENGTH = 42;
-  private TRANSACTION_MIN_LENGTH = 64;
-  private TRANSACTION_MAX_LENGTH = 66;
+  // Constants
+  public etherscan = etherscan;
 
-  constructor(public tabManagerService: TabManagerService) {
-  }
+  constructor() {}
 
-  public urlTokenResearch(): string {
-    return Url.ETHERSCAN_ADDRESS + this.TOKEN_PREFIX + this.normalizedSearchValue();
-  }
-
-  public urlAddressResearch(): string {
-    return Url.ETHERSCAN_ADDRESS + this.ADDRESS_PREFIX + this.normalizedSearchValue();
-  }
-
-  public urlBlockResearch(): string {
-    return Url.ETHERSCAN_ADDRESS + this.BLOCK_PREFIX + this.normalizedSearchValue();
-  }
-
-  public urlTransactionResearch(): string {
-    return Url.ETHERSCAN_ADDRESS + this.TRANSACTION_PREFIX + this.normalizedSearchValue();
-  }
-
+  /**
+   * Return {@link searchValue} normalized: length and format.
+   */
   public normalizedSearchValue(): string {
     if (this.searchValue.length === 0) {
       return '';
     }
 
     const length = this.searchValue.length;
-    if ([this.TRANSACTION_MIN_LENGTH, this.TRANSACTION_MIN_LENGTH + 1].includes(length)) {
-      return this.searchValue.padStart(this.TRANSACTION_MAX_LENGTH, '0x');
-    } else if ([this.ADDRESS_MIN_LENGTH, this.ADDRESS_MIN_LENGTH + 1].includes(length)) {
-      return this.searchValue.padStart(this.ADDRESS_MAX_LENGTH, '0x');
+    if ([etherscan.TAB_TRANSACTION.TX_MIN_LENGTH, etherscan.TAB_TRANSACTION.TX_MIN_LENGTH + 1].includes(length)) {
+      return this.searchValue.padStart(etherscan.TAB_TRANSACTION.TX_MAX_LENGTH, '0x');
+    } else if ([etherscan.TAB_ADDRESS.ADDRESS_MIN_LENGTH, etherscan.TAB_ADDRESS.ADDRESS_MIN_LENGTH + 1].includes(length)) {
+      return this.searchValue.padStart(etherscan.TAB_ADDRESS.ADDRESS_MAX_LENGTH, '0x');
     }
 
     return this.searchValue;
   }
 
+  /**
+   * Update the value of searching booleans: {@link searchingTx}, {@link searchingAddress}, {@link searchingBlock}.
+   * @param newValue value for the tests
+   */
   updateSearchingBools(newValue: string) {
     const newValueTrimmed = newValue.trim();
     const length = newValueTrimmed.length;
-    this.searchingTx = length >= this.TRANSACTION_MIN_LENGTH && length <= this.TRANSACTION_MAX_LENGTH;
-    this.searchingAddress = length >= this.ADDRESS_MIN_LENGTH && length <= this.ADDRESS_MAX_LENGTH;
-    this.searchingBlock = length > 0 && length < this.ADDRESS_MIN_LENGTH;
+    this.searchingTx = length >= etherscan.TAB_TRANSACTION.TX_MIN_LENGTH && length <= etherscan.TAB_TRANSACTION.TX_MAX_LENGTH;
+    this.searchingAddress = length >= etherscan.TAB_ADDRESS.ADDRESS_MIN_LENGTH && length <= etherscan.TAB_ADDRESS.ADDRESS_MAX_LENGTH;
+    this.searchingBlock = length > 0 && !this.searchingTx && !this.searchingAddress;
+  }
+
+  public urlTokenResearch(): string {
+    return etherscan.TABS.TOKEN + this.normalizedSearchValue();
+  }
+
+  public urlAddressResearch(): string {
+    return etherscan.TABS.ADDRESS + this.normalizedSearchValue();
+  }
+
+  public urlBlockResearch(): string {
+    return etherscan.TABS.BLOCK + this.normalizedSearchValue();
+  }
+
+  public urlTransactionResearch(): string {
+    return etherscan.TABS.TRANSACTION + this.normalizedSearchValue();
   }
 }

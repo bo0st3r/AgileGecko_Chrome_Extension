@@ -1,15 +1,14 @@
 <div class="container-xs bg-gradient-main p-2 panel-min-height">
 
-  <div class="row justify-content-center mt-3 mb-4">
-    <div class="col-2 text-center">
-      <r-extension-hyperlink class="img-fluid pr-3" href="https://www.etherscan.com/" pTooltip="Open Etherscan"
-                             tooltipPosition="bottom">
-        <img alt="Etherscan logo" src="assets\img\etherscan_logo.svg" style="width:50px;"/>
-      </r-extension-hyperlink>
+  <div class="row my-4 mx-3 no-gutters">
+    <div class="col-2">
+      <r-extension-hyperlink class="img-fluid" href="https://www.etherscan.com/"
+                             pTooltip="Open Etherscan" tooltipPosition="bottom">
+        <img alt="Etherscan logo" src="assets\img\etherscan_logo.svg" style="width:50px;"/></r-extension-hyperlink>
     </div>
 
     <!--    Search input-->
-    <div class="col-9 p-inputgroup align-self-center" style="height: 3em;">
+    <div class="col-10 p-inputgroup align-self-center" style="height: 3em;">
       <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
       <input
         (ngModelChange)="updateSearchingBools($event)" [(ngModel)]="searchValue" autocomplete="off" autofocus
@@ -19,49 +18,24 @@
   </div>
 
   <div class="row">
-    <div class="col mx-3" id="eth-scanner-links">
+    <div class="col txt-md mx-3">
       <div class="row">
         <div class="col-4">
-          <r-extension-hyperlink [disabled]="!searchingAddress"
-                                 [href]="urlAddressResearch()" class="d-block"> Address
-          </r-extension-hyperlink>
-          <r-extension-hyperlink [disabled]="!searchingAddress"
-                                 [href]="urlAddressResearch() + ADDRESS_ERC20_TXNS_SUFFIX" class="d-block ml-1">ERC20
-            Txns
-          </r-extension-hyperlink>
-          <r-extension-hyperlink [disabled]="!searchingAddress"
-                                 [href]="urlAddressResearch() + ADDRESS_INTERNAL_TXNS_SUFFIX" class="d-block ml-1">
-            Internal Txns
-          </r-extension-hyperlink>
-          <r-extension-hyperlink [disabled]="!searchingAddress"
-                                 [href]="urlAddressResearch() + ADDRESS_CONTRACT_SUFFIX" class="d-block ml-1"> Contract
-          </r-extension-hyperlink>
-          <r-extension-hyperlink [disabled]="!searchingAddress"
-                                 [href]="urlAddressResearch() + ADDRESS_LOANS_SUFFIX" class="d-block ml-1"> Loans
-          </r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingAddress" [href]="urlAddressResearch()" class="d-block">Address</r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingAddress" [href]="urlAddressResearch() + etherscan.TAB_ADDRESS.SUFFIXES.ERC20_TXS" class="d-block ml-1">ERC20 Txns</r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingAddress" [href]="urlAddressResearch() + etherscan.TAB_ADDRESS.SUFFIXES.INTERNAL_TXS" class="d-block ml-1">Internal Txns</r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingAddress" [href]="urlAddressResearch() + etherscan.TAB_ADDRESS.SUFFIXES.CONTRACT" class="d-block ml-1">Contract</r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingAddress" [href]="urlAddressResearch() + etherscan.TAB_ADDRESS.SUFFIXES.LOANS" class="d-block ml-1">Loans</r-extension-hyperlink>
         </div>
         <div class="col-4">
-          <r-extension-hyperlink [disabled]="!searchingAddress" [href]="urlTokenResearch()" class="d-block"> Token
-          </r-extension-hyperlink>
-          <r-extension-hyperlink [disabled]="!searchingAddress"
-                                 [href]="urlTokenResearch() + TOKEN_HOLDERS_SUFFIX" class="d-block ml-1"> Holders
-          </r-extension-hyperlink>
-          <r-extension-hyperlink [disabled]="!searchingAddress"
-                                 [href]="urlTokenResearch() + TOKEN_WRITE_CONTRACT_SUFFIX" class="d-block ml-1">Write
-            Contract
-          </r-extension-hyperlink>
-          <r-extension-hyperlink [disabled]="!searchingAddress"
-                                 [href]="urlTokenResearch() + TOKEN_READ_CONTRACT_SUFFIX" class="d-block ml-1">Read
-            Contract
-          </r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingAddress" [href]="urlTokenResearch()" class="d-block">Token</r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingAddress" [href]="urlTokenResearch() + etherscan.TAB_TOKEN.SUFFIXES.HOLDERS" class="d-block ml-1"> Holders</r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingAddress" [href]="urlTokenResearch() + etherscan.TAB_TOKEN.SUFFIXES.WRITE_CONTRACT" class="d-block ml-1">Write Contract</r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingAddress" [href]="urlTokenResearch() + etherscan.TAB_TOKEN.SUFFIXES.READ_CONTRACT" class="d-block ml-1">Read Contract</r-extension-hyperlink>
         </div>
         <div class="col-4">
-          <r-extension-hyperlink [disabled]="!searchingTx"
-                                 [href]="urlTransactionResearch()" class="d-block"> Transaction
-          </r-extension-hyperlink>
-          <r-extension-hyperlink [disabled]="!searchingBlock"
-                                 [href]="urlBlockResearch()" class="d-block"> Block
-          </r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingTx" [href]="urlTransactionResearch()" class="d-block">Transaction</r-extension-hyperlink>
+          <r-extension-hyperlink [disabled]="!searchingBlock" [href]="urlBlockResearch()" class="d-block">Block</r-extension-hyperlink>
         </div>
       </div>
     </div>

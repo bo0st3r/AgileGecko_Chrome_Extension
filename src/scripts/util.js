@@ -1,14 +1,23 @@
-// function codeToInject() {
-//   // Do here whatever your script requires. For example:
-//     console.log(window);
-//     console.log(window.ethereum);
-//   window.foo = "bar";
-// }
+// // https://stackoverflow.com/questions/5448246/how-to-get-the-id-of-a-chrome-tab/32978880
+// //   http://waitingphoenix.com/how-to-make-your-chrome-extension-access-webpage/
 //
-// function embed(fn) {
-//   const script = document.createElement("script");
-//   script.text = `(${fn.toString()})();`;
-//   document.documentElement.appendChild(script);
-// }
+// let contentPort
+// chrome.runtime.onConnect.addListener(function(portFrom) {
+//   if(portFrom.name === 'background-content') {
+//     //This is how you add listener to a port.
+//     portFrom.onMessage.addListener(function(message) {
+//       console.log('message');
+//       console.log(message);
+//       //Do something to duck
+//     });
+//   }
+// });
 //
-// embed(codeToInject);
+// // var tabId;
+// // chrome.extension.sendMessage({ type: 'getTabId' }, function(res) {
+// //   tabId = res.tabId;
+// // });
+//
+// //Send a message to a tab which has your content script injected
+// chrome.tabs.sendMessage(tabId, {action: 'GET_ETHEREUM'});
+//

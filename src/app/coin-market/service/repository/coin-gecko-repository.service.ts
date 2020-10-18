@@ -2,19 +2,47 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {CoinDto} from '../../dto/coin-dto';
 import {Observable} from 'rxjs';
-import {retry} from 'rxjs/operators';
+import {map, retry} from 'rxjs/operators';
 import {coingecko} from '../../../../constants/coingecko';
+import {constants} from '../../../../constants/constants';
+import {MarketDto} from '../../dto/market-dto';
+import {MarketQueryParams} from '../../type/market-query-params';
+import {HttpOptionsGeneratorService} from '../../../http/util/http-options-generator.service';
+import {CaseStyle} from '../../../typo-case/enum/case-style';
+import {CaseTransformerService} from '../../../typo-case/service/case-transformer.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoinGeckoRepositoryService {
-  public COIN_LIST_SUFFIX = 'coins/list';
 
-  constructor(public httpClient: HttpClient) {
+  constructor(public httpClient: HttpClient,
+              public httpOptionsGenerator: HttpOptionsGeneratorService,
+              public caseTransformer: CaseTransformerService) {
   }
 
-  public fetchCoins(): Observable<HttpResponse<CoinDto[]>> {
-    return this.httpClient.get<CoinDto[]>(coingecko.API.HOST + this.COIN_LIST_SUFFIX, {observe: 'response'}).pipe(retry(3));
+  public fetchCoinList(): Observable<HttpResponse<CoinDto[]>> {
+    let request = this.httpClient.get<CoinDto[]>(coingecko.ENDPOINTS.COINS_LIST,
+      {observe: 'response'});
+    request = request.pipe(retry(constants.HTTP.NB_TRIALS));
+    return request;
+  }
+
+  public fetchMarkets(params: MarketQueryParams): Observable<HttpResponse<MarketDto[]>> {
+    let httpParams = this.httpOptionsGenerator.httpParamsFromObject(params, CaseStyle.SNAKE);
+    let request = this.httpClient.get<MarketDto[]>(coingecko.ENDPOINTS.COINS_MARKETS,
+      {observe: 'response', params: httpParams}).pipe(map(resp => {
+      let respCopy = Object.create(resp);
+      respCopy.body = this.caseTransformer.snakeArrayOfPairsToCamel(resp.body);
+      return respCopy;
+    }));
+
+    request = request.pipe(retry(constants.HTTP.NB_TRIALS));
+    return request;
+  }
+
+  // TODO
+  public fetchAllMarkets(params: MarketQueryParams): Observable<HttpResponse<MarketDto[]>> {
+    return null;
   }
 }

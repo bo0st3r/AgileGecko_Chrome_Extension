@@ -11,15 +11,22 @@ const TABS = {
 };
 
 /**
+ * API entry point
+ */
+const API = 'https://api.coingecko.com/api/v3/';
+
+/**
  * API endpoints
  */
-const API = {
-  HOST: 'https://api.coingecko.com/api/v3/'
+const ENDPOINTS = {
+  COINS_LIST: API + 'coins/list',
+  COINS_MARKETS: API + 'coins/markets',
 };
 
 export const coingecko = {
   HOST,
   TABS,
+  ENDPOINTS,
   API
 };
 

@@ -12,8 +12,9 @@
   <div class="row my-4 mx-3 no-gutters">
     <!--  Coingecko Logo-->
     <div class="col-2">
-      <r-extension-hyperlink class="img" href="https://www.coingecko.com/">
-        <img alt="CoinGecko logo" src="assets\img\coingecko_logo.svg" style="width:50px;" pTooltip="Open CoinGecko" tooltipPosition="bottom"/>
+      <r-extension-hyperlink class="img" href="https://www.coingecko.com/"
+                             pTooltip="Open CoinGecko" tooltipPosition="bottom" showDelay="100">
+        <img alt="CoinGecko logo" src="assets\img\coingecko_logo.svg" style="width:50px;"/>
       </r-extension-hyperlink>
     </div>
 
@@ -22,7 +23,7 @@
       <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
       <input (input)="updateDisplayedCoins()"
              (keydown.enter)="tabManagerService.openTab(coingecko.TABS.COIN_PAGE + selectedCoin.id.toString())"
-             [(ngModel)]="searchedCoin" autocomplete="off" autofocus id="coin-searched" label="Name or symbol"
+             [(ngModel)]="searchedCoin" autocomplete="off" autofocus id="coin-searched"
              pInputText placeholder="Name or symbol" type="text">
     </div>
   </div>
@@ -60,7 +61,7 @@
             <!--            Coin name-->
             <td style="width:61%">
               <a (click)="tabManagerService.openTab(coingecko.TABS.COIN_PAGE + coin.id)"
-                 class="hyperlink" pTooltip="View on CG" tooltipPosition="bottom">{{coin.name}}</a>
+                 class="hyperlink" pTooltip="View on CoinGecko" tooltipPosition="bottom" showDelay="100">{{coin.name}}</a>
             </td>
             <!--          Icons -->
             <td class=" align-middle px-1" style="width:16%">
@@ -73,7 +74,7 @@
                 <i (click)="favoriteManagerService.updateAndSaveFavorite(coin)"
                    [ngClass]="(favoriteCoinsContains(coin)) ? 'favorite-icon' : 'not-favorite-icon'"
                    class="pi pi-star font-weight-bold"
-                   pTooltip="Favorite" tooltipPosition="bottom" showDelay="150"></i>
+                   pTooltip="Favorite" tooltipPosition="bottom" showDelay="100"></i>
               </div>
             </td>
           </tr>

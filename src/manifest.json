@@ -7,6 +7,7 @@
     "storage",
     "webRequest",
     "webNavigation",
+    "activeTab",
     "tabs",
     "browsingData",
     "clipboardRead"
@@ -17,13 +18,22 @@
   "content_scripts": [
     {
       "matches": [
-        "https://api.coingecko.com/api/v3/*"
+        "<all_url>"
       ],
       "js": [
-        "scripts/util.js"
+        "scripts/ethereum.js"
       ],
-      "run_at": "document_end"
+      "run_at": "document_end",
+      "all_frames": true
     }
+  ],
+  "background": {
+    "scripts": [
+      "scripts/util.js"
+    ]
+  },
+  "web_accessible_resources": [
+    "scripts/pagescript.js"
   ]
 }
 

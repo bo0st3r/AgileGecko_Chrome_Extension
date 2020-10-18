@@ -8,6 +8,8 @@ import {MatchCoinPipe} from '../../pipe/matching-coin.pipe';
 import {CoinGeckoRepositoryService} from '../../service/repository/coin-gecko-repository.service';
 import {coingecko} from '../../../../constants/coingecko';
 import {chartex} from '../../../../constants/chartex';
+import {defaultMarketQueryParams} from '../../type/market-query-params';
+import {MarketDto} from '../../dto/market-dto';
 
 @Component({
   selector: 'r-coin-search',
@@ -23,18 +25,22 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    * Selected coin on the UI.
    */
   public selectedCoin: CoinDto;
+  public selectedMarket: MarketDto;
   /**
    * List of coins retrieved from the CoinGecko list endpoint by {@link CoinGeckoRepositoryService}.
    */
   public coins: Array<CoinDto> = new Array<CoinDto>();
+  public markets: Array<MarketDto> = new Array<MarketDto>();
   /**
    * List of coins displayed {@link searchedCoin} within {@link coins}.
    */
   public displayedCoins: Array<CoinDto> = new Array<CoinDto>();
+  public displayedMarkets: Array<MarketDto> = new Array<MarketDto>();
   /**
    * List of the user's favorite coins.
    */
   public favoriteCoins: Array<CoinDto> = new Array<CoinDto>();
+  public favoriteMarkets: Array<MarketDto> = new Array<MarketDto>();
   /**
    * Subscription of the favorite coins Array from {@link FavoriteManagerService}
    */
@@ -56,14 +62,16 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * TODO
    * Do:
    * -Retrieve the list of coins
    * -Subscribe to {@link FavoriteManagerService} observable for favorite coins updates.
    * -Ask {@link FavoriteManagerService} for a notification and assigns it's value to {@link displayedCoins}.
    * - Fetch the favorite list with {@link FavoriteManagerService} and update {@link favoriteCoins}.
-
    */
   ngOnInit(): void {
+    this.fetchAllMarketsAndUpdate();
+
     this.fetchAndUpdateCoins();
 
     this.favoriteCoinsSubscription = this.favoriteManagerService.favoriteUpdateAsObservable().subscribe(favoriteCoins => {
@@ -73,6 +81,12 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
     });
     this.favoriteManagerService.notify();
     this.displayedCoins = this.favoriteCoins;
+  }
+
+  // TODO
+  public fetchAllMarketsAndUpdate(): void {
+    let marketsQueryParams = defaultMarketQueryParams;
+    console.log('markets', this.markets);
   }
 
   /**
@@ -86,9 +100,9 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    * Fetch the coin list with {@link CoinGeckoRepositoryService} and update {@link coinsLoadingFailed}.
    */
   public fetchAndUpdateCoins(): void {
-    this.coinGeckoRepositoryService.fetchCoins().subscribe(coinsResponse => {
-      if (coinsResponse.body) {
-        this.coins = coinsResponse.body;
+    this.coinGeckoRepositoryService.fetchCoinList().subscribe(coins => {
+      if (coins.body) {
+        this.coins = coins.body;
         this.coinsLoadingFailed = false;
       } else {
         this.coinsLoadingFailed = true;
@@ -106,9 +120,6 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    * @see searchedCoin
    */
   public updateDisplayedCoins(): void {
-    console.log('coins length: ' + this.coins.length);
-    console.log('searchedCoin length: ' + this.searchedCoin.length);
-    console.log('favoriteCoins length: ' + this.favoriteCoins.length);
     if (this.coins.length > 0 && this.searchedCoin.length > 1) {
       this.displayedCoins = this.matchCoinPipe.transform(this.coins, this.searchedCoin);
     } else if (this.favoriteCoins.length > 0) {
@@ -129,10 +140,5 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    */
   public favoriteCoinsContains(coin: CoinDto): boolean {
     return this.favoriteCoins.some(value => value.id === coin.id);
-  }
-
-  log(s: string) {
-    console.log(s);
-
   }
 }

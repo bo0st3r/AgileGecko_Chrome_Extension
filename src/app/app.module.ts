@@ -28,7 +28,6 @@ import {HeaderComponent} from './layout/component/header/header.component';
     FooterComponent,
     ExtensionHyperlinkComponent,
     HeaderComponent,
-
     MatchCoinPipe,
   ],
   imports: [

@@ -1,15 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {CoinDto} from '../../dto/coin-dto';
-import {Observable} from 'rxjs';
-import {map, retry} from 'rxjs/operators';
+import {EMPTY, Observable, of, Subject} from 'rxjs';
+import {concatMap, expand, map, retry} from 'rxjs/operators';
 import {coingecko} from '../../../../constants/coingecko';
 import {constants} from '../../../../constants/constants';
 import {MarketDto} from '../../dto/market-dto';
-import {MarketQueryParams} from '../../type/market-query-params';
+import {defaultMarketQueryParams, MarketQueryParams} from '../../type/market-query-params';
 import {HttpOptionsGeneratorService} from '../../../http/util/http-options-generator.service';
 import {CaseStyle} from '../../../typo-case/enum/case-style';
 import {CaseTransformerService} from '../../../typo-case/service/case-transformer.service';
+import {logger} from 'codelyzer/util/logger';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,7 @@ export class CoinGeckoRepositoryService {
       let respCopy = Object.create(resp);
       respCopy.body = this.caseTransformer.snakeArrayOfPairsToCamel(resp.body);
       return respCopy;
+
     }));
 
     request = request.pipe(retry(constants.HTTP.NB_TRIALS));
@@ -42,7 +44,20 @@ export class CoinGeckoRepositoryService {
   }
 
   // TODO
-  public fetchAllMarkets(params: MarketQueryParams): Observable<HttpResponse<MarketDto[]>> {
-    return null;
+  public fetchAllMarkets(): Observable<HttpResponse<MarketDto[]>> {
+    let params = defaultMarketQueryParams;
+    params.perPage = 250;
+    params.page = 1;
+
+    let subscription = this.fetchMarkets(params).pipe(expand(value => {
+      if(value.body){
+        params.page++;
+        return this.fetchMarkets(params);
+      } else {
+        return EMPTY;
+      }
+    }));
+
+    return subscription;
   }
 }

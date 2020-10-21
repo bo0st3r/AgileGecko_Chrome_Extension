@@ -5,7 +5,6 @@ html {
   font-size: 15px;
   min-width: 440px;
   max-width: 440px;
-  min-height: 508px;
 }
 
 html[theme='dark-mode'] {
@@ -75,6 +74,14 @@ html[theme='dark-mode'] img {
 /****************************************************
                       Text
 *****************************************************/
+.txt-xs {
+  font-size: 0.85em;
+}
+
+.txt-sm {
+  font-size: 0.93em;
+}
+
 .txt-md {
   font-size: 1.1em;
 }

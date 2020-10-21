@@ -13,7 +13,7 @@
     <!--  Coingecko Logo-->
     <div class="col-2">
       <r-extension-hyperlink class="img" href="https://www.coingecko.com/"
-                             pTooltip="Open CoinGecko" tooltipPosition="bottom" showDelay="100">
+                             pTooltip="Open CoinGecko" showDelay="100" tooltipPosition="bottom">
         <img alt="CoinGecko logo" src="assets\img\coingecko_logo.svg" style="width:50px;"/>
       </r-extension-hyperlink>
     </div>
@@ -21,8 +21,7 @@
     <!--  Coin search input-->
     <div class="col-10 p-inputgroup align-self-center" style="height: 3em;">
       <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
-      <input (input)="updateDisplayedCoins()"
-             (keydown.enter)="tabManagerService.openTab(coingecko.TABS.COIN_PAGE + selectedCoin.id.toString())"
+      <input (input)="filterCoins(); fetchFilteredMarkets();"
              [(ngModel)]="searchedCoin" autocomplete="off" autofocus id="coin-searched"
              pInputText placeholder="Name or symbol" type="text">
     </div>
@@ -31,8 +30,10 @@
   <!--  Coin list table-->
   <div class="row justify-content-center">
     <div class="col-12">
+      <!--      <p-table [rows]="6" [scrollable]="true" [value]="displayedCoins" [virtualRowHeight]="6" [virtualScroll]="true"-->
+      <!--               scrollHeight="286px" styleClass="p-datatable-striped">-->
       <p-table [rows]="6" [scrollable]="true" [value]="displayedCoins" [virtualRowHeight]="6" [virtualScroll]="true"
-               scrollHeight="286px" styleClass="p-datatable-striped">
+               scrollHeight="340px" styleClass="p-datatable-striped">
         <!--        Header-->
         <ng-template pTemplate="header">
           <ng-container *ngIf="displayedCoins && displayedCoins.length > 0; else listUnset;">
@@ -53,28 +54,41 @@
 
         <!--        Rows-->
         <ng-template let-coin pTemplate="body">
-          <tr>
-            <!--            Coin symbol-->
-            <td style="width:23%">
+          <tr  class="txt-sm">
+            <!--            Logo-->
+            <td class="text-center" style="width:12%">
+              <r-hyperlink>
+                <img [src]="coin.image" [alt]="coin.symbol +'\'s price'"
+                     (click)="tabManagerService.openTab(coingecko.TABS.COIN_PAGE + coin.id)"
+                     class="hyperlink" height="27px"/>
+              </r-hyperlink>
+            </td>
+            <!--            Symbol-->
+            <td style="width:13%" class="overflow-hidden">
               <p class="d-inline font-weight-bold">{{coin.symbol | uppercase}}</p>
             </td>
-            <!--            Coin name-->
-            <td style="width:61%">
+            <!--            Name-->
+            <td style="width:39%">
               <a (click)="tabManagerService.openTab(coingecko.TABS.COIN_PAGE + coin.id)"
-                 class="hyperlink" pTooltip="View on CoinGecko" tooltipPosition="bottom" showDelay="100">{{coin.name}}</a>
+                 class="hyperlink" pTooltip="View on CoinGecko" showDelay="100"
+                 tooltipPosition="bottom">{{coin.name}}</a>
+            </td>
+            <!--            Price-->
+            <td style="width:20%">
+              <strong class="">{{coin.currentPrice | currency:'USD':'symbol'}}</strong>
             </td>
             <!--          Icons -->
-            <td class=" align-middle px-1" style="width:16%">
+            <td style="width:16%" class="align-middle px-1">
               <div class="d-flex justify-content-around">
-<!--                ChartEx-->
+                <!--                ChartEx-->
                 <i (click)="tabManagerService.openTab(chartex.PAIR.URL + coin.symbol.toUpperCase());"
                    class="pi pi-chart-line chart-icon"
-                   pTooltip="Chart" tooltipPosition="bottom" showDelay="100"></i>
-<!--                Favorite-->
+                   pTooltip="Chart" showDelay="100" tooltipPosition="bottom"></i>
+                <!--                Favorite-->
                 <i (click)="favoriteManagerService.updateAndSaveFavorite(coin)"
                    [ngClass]="(favoriteCoinsContains(coin)) ? 'favorite-icon' : 'not-favorite-icon'"
                    class="pi pi-star font-weight-bold"
-                   pTooltip="Favorite" tooltipPosition="bottom" showDelay="100"></i>
+                   pTooltip="Favorite" showDelay="100" tooltipPosition="bottom"></i>
               </div>
             </td>
           </tr>

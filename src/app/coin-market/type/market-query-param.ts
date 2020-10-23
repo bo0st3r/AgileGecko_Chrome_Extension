@@ -3,7 +3,7 @@ import {MarketOrderEnum} from '../enum/market-order.enum';
 import {MarketCategoryEnum} from '../enum/market-category.enum';
 import {PriceEvolutionTimeframeEnum} from '../enum/price-evolution-timeframe.enum';
 
-export interface MarketQueryParams {
+export interface MarketQueryParam {
   vsCurrency: VsCurrencyEnum,
   marketOrder?: MarketOrderEnum,
   category?: MarketCategoryEnum,
@@ -14,6 +14,6 @@ export interface MarketQueryParams {
   sparkline?: boolean,
 }
 
-export const defaultMarketQueryParams: MarketQueryParams = {
+export const defaultMarketQueryParams: MarketQueryParam = {
   vsCurrency: VsCurrencyEnum.USD,
 };

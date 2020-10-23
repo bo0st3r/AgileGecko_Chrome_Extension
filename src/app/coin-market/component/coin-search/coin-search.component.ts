@@ -1,6 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CoinDto} from '../../dto/coin-dto';
-import {Subscription} from 'rxjs';
+import {fromEvent, Observable, Subscription} from 'rxjs';
 import {TabManagerService} from '../../../chrome/util/tab/tab-manager.service';
 import {FavoriteManagerService} from '../../../layout/service/favorite-manager.service';
 import {LocalStorageManagerService} from '../../../chrome/util/storage/local-storage-manager.service';
@@ -8,52 +8,64 @@ import {MatchCoinPipe} from '../../pipe/matching-coin.pipe';
 import {CoinGeckoRepositoryService} from '../../service/repository/coin-gecko-repository.service';
 import {coingecko} from '../../../../constants/coingecko';
 import {chartex} from '../../../../constants/chartex';
-import {defaultMarketQueryParams} from '../../type/market-query-params';
 import {MarketDto} from '../../dto/market-dto';
+import {debounceTime} from 'rxjs/operators';
+import {constants} from '../../../../constants/constants';
+import {error} from '@angular/compiler/src/util';
 
 @Component({
   selector: 'r-coin-search',
   templateUrl: './coin-search.component.html',
   styleUrls: ['./coin-search.component.css']
 })
-export class CoinSearchComponent implements OnInit, OnDestroy {
+export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
+  // Constants
+  public readonly coingecko = coingecko;
+  public readonly chartex = chartex;
+
   /**
    * Name or symbol of the searched coin.
    */
   public searchedCoin = '';
+
   /**
    * List of coins retrieved from the CoinGecko list endpoint by {@link CoinGeckoRepositoryService}.
    */
   public coins: Array<CoinDto> = new Array<CoinDto>();
-  public markets: Array<MarketDto> = new Array<MarketDto>();
+
   /**
    * List of coins displayed {@link searchedCoin} within {@link coins}.
    */
   public displayedCoins: Array<CoinDto> = new Array<CoinDto>();
-  public filteredCoins: Array<CoinDto> = new Array<CoinDto>();
-  public displayedMarkets: Array<MarketDto> = new Array<MarketDto>();
-  public filteredMarkets: Array<CoinDto> = new Array<MarketDto>();
+
+  // public filteredCoins: Array<CoinDto> = new Array<CoinDto>();
+
+  public filteredMarkets: Array<MarketDto> = new Array<MarketDto>();
+
   /**
    * List of the user's favorite coins.
    */
-  public favoriteMarkets: Array<CoinDto> = new Array<MarketDto>();
+  public favorites: Array<CoinDto> = new Array<MarketDto>();
+
   /**
    * Subscription of the favorite coins Array from {@link FavoriteManagerService}
    */
   public favoriteCoinsSubscription: Subscription;
+
   /**
    * If the loading fails, this field is set to true.
    */
   public coinsLoadingFailed: boolean;
-  // Constants
-  public coingecko = coingecko;
-  public chartex = chartex;
+
+  public inputObs: Observable<Event>;
+  @ViewChild('searchInput')
+  public searchInput: ElementRef;
 
   constructor(
+    private localStorageManagerService: LocalStorageManagerService,
+    private coinGeckoRepositoryService: CoinGeckoRepositoryService,
     public tabManagerService: TabManagerService,
     public favoriteManagerService: FavoriteManagerService,
-    public localStorageManagerService: LocalStorageManagerService,
-    public coinGeckoRepositoryService: CoinGeckoRepositoryService,
     public matchCoinPipe: MatchCoinPipe) {
   }
 
@@ -63,77 +75,102 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    * -Retrieve the list of coins
    * -Subscribe to {@link FavoriteManagerService} observable for favorite coins updates.
    * -Ask {@link FavoriteManagerService} for a notification and assigns it's value to {@link displayedCoins}.
-   * - Fetch the favorite list with {@link FavoriteManagerService} and update {@link favoriteMarkets}.
+   * - Fetch the favorite list with {@link FavoriteManagerService} and update {@link favorites}.
    */
   ngOnInit(): void {
     this.fetchAndUpdateCoins();
 
-    this.favoriteCoinsSubscription = this.favoriteManagerService.favoriteUpdateAsObservable().subscribe(favoriteCoins => {
-      this.favoriteMarkets = favoriteCoins;
-    }, error => {
-      console.error(error);
-    });
+    this.favoriteCoinsSubscription = this.favoriteManagerService.favoriteUpdateAsObservable()
+      .subscribe(favoriteCoinsIds => {
+        this.coinGeckoRepositoryService.fetchMarketsByIds(favoriteCoinsIds).subscribe(marketsResp => {
+          this.favorites = marketsResp.body;
+          this.updateDisplayedMarkets();
+        });
+      });
+
     this.favoriteManagerService.notify();
-    this.displayedCoins = this.favoriteMarkets;
+  }
+
+  /**
+   * Set a debounce time between typing characters for filtering and fetching coins.
+   */
+  ngAfterViewInit(): void {
+    this.inputObs = fromEvent(this.searchInput.nativeElement, 'keydown');
+    this.inputObs.pipe(debounceTime(constants.MS_BETWEEN)).subscribe(() => {
+      this.filterCoins();
+      this.fetchFilteredMarkets();
+    });
   }
 
   /**
    * Unsubscribe from {@link favoriteCoinsSubscription}.
    */
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.favoriteCoinsSubscription.unsubscribe();
   }
 
-  // TODO
-  public fetchFilteredMarkets(updateInterface: boolean = true): void {
-    let params = defaultMarketQueryParams;
-    defaultMarketQueryParams.ids = [];
-
-    this.filteredCoins.forEach(coin => {
-      defaultMarketQueryParams.ids.push(coin.id);
-    });
-
-    this.coinGeckoRepositoryService.fetchMarkets(params).subscribe(marketsResp => {
-      this.filteredMarkets = marketsResp.body;
-      if (updateInterface) {
-        this.displayFilteredMarkets();
-      }
-    });
+  /**
+   * If {@link displayedCoins} has values, open a tab for the first coin of the list.
+   */
+  @HostListener('window:keydown.enter')
+  onEnterKeyPressed(): void {
+    if (this.displayedCoins.length) {
+      this.tabManagerService.openTab(coingecko.TABS.COIN_PAGE + this.displayedCoins[0].id);
+    }
   }
 
   /**
-   * Updates the list of displayed coins by using {@link searchedCoin}'s value.
-   * If empty, displays the list of favorite coins ({@link favoriteMarkets}) instead.
-   * If there's no favorite, displays an empty list.
-   * @see searchedCoin
+   * Fetch markets corresponding to the values of {@link filteredCoins} and updates
+   * the interface if {@param updateInterface}.
+   * @param updateInterface if should update the UI, default to true
    */
-  // public updateDisplayedCoins(): void {
-  //   if (this.coins.length > 0 && this.searchedCoin.length > 1) {
-  //     this.displayedCoins = this.matchCoinPipe.transform(this.coins, this.searchedCoin);
-  //   } else if (this.favoriteMarkets.length > 0) {
-  //     if (this.searchedCoin.length > 1) {
-  //       this.displayedCoins = this.matchCoinPipe.transform(this.favoriteMarkets, this.searchedCoin);
-  //     } else {
-  //       this.displayedCoins = this.favoriteMarkets;
-  //     }
-  //   } else {
-  //     this.displayedCoins = new Array<CoinDto>();
-  //   }
-  // }
+  public fetchFilteredMarkets(updateInterface: boolean = true): void {
+    // try {
+    //   console.log('a');
+    //   this.coins = [];
+      const ids = this.filterCoins().map(coin => {
+        return coin.id;
+      });
+      // console.log('try');
+      this.coinGeckoRepositoryService.fetchMarketsByIds(ids).subscribe(marketsResp => {
+        this.filteredMarkets = marketsResp.body;
+        if (updateInterface) {
+          this.updateDisplayedMarkets();
+        }
+      });
+    // } catch {
+    //   console.log('catch');
+    //
+    // }
+    // console.log('b');
 
-  // TODO
-  public filterCoins(): void {
-    if (this.coins.length > 0 && this.searchedCoin.length > 1) {
-      this.filteredCoins = this.matchCoinPipe.transform(this.coins, this.searchedCoin);
+  }
+
+  /**
+   * Call {@link filteredCoins} and {@link fetchFilteredMarkets}.
+   */
+  public updateCoinsTable(): void {
+    this.filterCoins();
+    this.fetchFilteredMarkets();
+  }
+
+  /**
+   * Update {@link displayedCoins}'s value with either {@link filteredMarkets}, {@link favorites} or an empty array.
+   */
+  private updateDisplayedMarkets(): void {
+    if (this.filteredMarkets.length && this.searchedCoin.length > 0) {
+      this.displayedCoins = this.filteredMarkets;
+    } else if (this.favorites.length > 0) {
+      this.displayedCoins = this.favorites;
     } else {
-      this.filteredCoins = new Array<CoinDto>();
+      this.displayedCoins = new Array<MarketDto>();
     }
   }
 
   /**
    * Fetch the coin list with {@link CoinGeckoRepositoryService} and update {@link coinsLoadingFailed}.
    */
-  public fetchAndUpdateCoins(): void {
+  private fetchAndUpdateCoins(): void {
     this.coinGeckoRepositoryService.fetchCoinList().subscribe(coins => {
       if (coins.body) {
         this.coins = coins.body;
@@ -148,26 +185,14 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Check if the favoriteMarkets list contains the given coin.
-   * Compare with the 'some' method and by providing coins' IDs.
-   * @param coin coin to compare
+   * Filter {@link coins} with {@link MatchCoinPipe} and put them in {@link filteredCoins}
+   * if {@link coins} and {@link searchedCoin} are defined.
+   * Otherwise, set it to an empty array.
    */
-  public favoriteCoinsContains(coin: CoinDto): boolean {
-    return this.favoriteMarkets.some(value => value.id === coin.id);
-  }
-
-  // TODO
-  private displayFilteredMarkets(): void {
-    if (this.filteredMarkets.length > 0 && this.searchedCoin.length) {
-      this.displayedCoins = this.filteredMarkets;
-    } else if (this.favoriteMarkets.length > 0) {
-      if (this.searchedCoin.length > 1) {
-        this.displayedCoins = this.matchCoinPipe.transform(this.favoriteMarkets, this.searchedCoin);
-      } else {
-        this.displayedCoins = this.favoriteMarkets;
-      }
-    } else {
-      this.displayedMarkets = new Array<MarketDto>();
+  private filterCoins(): Array<CoinDto> {
+    if (this.coins.length && this.searchedCoin.length > 1) {
+      return this.matchCoinPipe.transform(this.coins, this.searchedCoin);
     }
+    throw error('Both coin list and searched coin should be populated.');
   }
 }

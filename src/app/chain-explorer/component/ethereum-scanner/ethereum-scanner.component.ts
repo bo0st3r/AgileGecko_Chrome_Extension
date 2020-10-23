@@ -7,26 +7,28 @@ import {etherscan} from '../../../../constants/etherscan';
   styleUrls: ['./ethereum-scanner.component.css']
 })
 export class EthereumScannerComponent {
+  // Constants
+  public readonly etherscan = etherscan;
+
   /**
    * Value searched by user.
    */
   public searchValue = '';
+
   /**
    * User searching for an address.
    */
   public searchingAddress: boolean;
+
   /**
    * User searching for a transaction.
    */
   public searchingTx: boolean;
+
   /**
    * User searching for a block.
    */
   public searchingBlock: boolean;
-  // Constants
-  public etherscan = etherscan;
-
-  constructor() {}
 
   /**
    * Return {@link searchValue} normalized: length and format.

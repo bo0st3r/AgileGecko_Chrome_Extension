@@ -18,6 +18,7 @@ import {DialogModule} from 'primeng/dialog';
 import {RadioButtonModule} from 'primeng/radiobutton';
 import {ExtensionHyperlinkComponent} from './chrome-tool/component/extension-hyperlink/extension-hyperlink.component';
 import {HeaderComponent} from './layout/component/header/header.component';
+import {ChipsModule} from 'primeng/chips';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import {HeaderComponent} from './layout/component/header/header.component';
     DialogModule,
     BrowserAnimationsModule,
     RadioButtonModule,
+    ChipsModule,
   ],
   providers: [
     MatchCoinPipe

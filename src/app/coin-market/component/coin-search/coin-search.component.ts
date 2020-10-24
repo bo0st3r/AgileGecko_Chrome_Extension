@@ -11,7 +11,6 @@ import {chartex} from '../../../../constants/chartex';
 import {MarketDto} from '../../dto/market-dto';
 import {debounceTime} from 'rxjs/operators';
 import {constants} from '../../../../constants/constants';
-import {error} from '@angular/compiler/src/util';
 
 @Component({
   selector: 'r-coin-search',
@@ -36,7 +35,7 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * List of coins displayed {@link searchedCoin} within {@link coins}.
    */
-  public displayedCoins: Array<CoinDto> = new Array<CoinDto>();
+  public displayedCoins: Array<MarketDto> = new Array<MarketDto>();
 
   // public filteredCoins: Array<CoinDto> = new Array<CoinDto>();
 
@@ -45,21 +44,27 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * List of the user's favorite coins.
    */
-  public favorites: Array<CoinDto> = new Array<MarketDto>();
+  public favorites: Array<MarketDto> = new Array<MarketDto>();
 
   /**
    * Subscription of the favorite coins Array from {@link FavoriteManagerService}
    */
   public favoriteCoinsSubscription: Subscription;
 
-  /**
-   * If the loading fails, this field is set to true.
-   */
   public coinsLoadingFailed: boolean;
+  public canSearch = false;
 
-  public inputObs: Observable<Event>;
+  /**
+   * Search input element.
+   */
   @ViewChild('searchInput')
   public searchInput: ElementRef;
+  /**
+   * Observable for the search input element: {@link searchInput}.
+   */
+  public inputObs: Observable<Event>;
+
+  public rowHeight = 41;
 
   constructor(
     private localStorageManagerService: LocalStorageManagerService,
@@ -97,7 +102,7 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     this.inputObs = fromEvent(this.searchInput.nativeElement, 'keydown');
     this.inputObs.pipe(debounceTime(constants.MS_BETWEEN)).subscribe(() => {
-      this.filterCoins();
+      this.searchedCoin = this.searchedCoin.trim();
       this.fetchFilteredMarkets();
     });
   }
@@ -124,46 +129,41 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
    * the interface if {@param updateInterface}.
    * @param updateInterface if should update the UI, default to true
    */
-  public fetchFilteredMarkets(updateInterface: boolean = true): void {
-    // try {
-    //   console.log('a');
-    //   this.coins = [];
-      const ids = this.filterCoins().map(coin => {
-        return coin.id;
-      });
-      // console.log('try');
+  public fetchFilteredMarkets(): void {
+    const ids = this.filterCoins().map(coin => {
+      return coin.id;
+    });
+
+    if (ids.length) {
       this.coinGeckoRepositoryService.fetchMarketsByIds(ids).subscribe(marketsResp => {
         this.filteredMarkets = marketsResp.body;
-        if (updateInterface) {
-          this.updateDisplayedMarkets();
-        }
+        this.updateDisplayedMarkets();
       });
-    // } catch {
-    //   console.log('catch');
-    //
-    // }
-    // console.log('b');
-
-  }
-
-  /**
-   * Call {@link filteredCoins} and {@link fetchFilteredMarkets}.
-   */
-  public updateCoinsTable(): void {
-    this.filterCoins();
-    this.fetchFilteredMarkets();
+    } else {
+      this.filteredMarkets = new Array<MarketDto>();
+      this.updateDisplayedMarkets();
+    }
   }
 
   /**
    * Update {@link displayedCoins}'s value with either {@link filteredMarkets}, {@link favorites} or an empty array.
+   * @param updateInterface does nothing if false. True by default.
    */
-  private updateDisplayedMarkets(): void {
-    if (this.filteredMarkets.length && this.searchedCoin.length > 0) {
-      this.displayedCoins = this.filteredMarkets;
-    } else if (this.favorites.length > 0) {
-      this.displayedCoins = this.favorites;
-    } else {
-      this.displayedCoins = new Array<MarketDto>();
+  private updateDisplayedMarkets(updateInterface: boolean = true): void {
+    if (updateInterface) {
+      if (this.searchedCoin.length > 1) {
+        // Looking after a coin...
+        if (this.filteredMarkets.length) {
+          // and has matches
+          this.displayedCoins = this.filteredMarkets;
+        } else if (this.favorites.length) {
+          // and didn't match any
+          this.displayedCoins = new Array<MarketDto>();
+        }
+      } else {
+        // Not looking after a coin
+        this.displayedCoins = this.favorites;
+      }
     }
   }
 
@@ -174,6 +174,7 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     this.coinGeckoRepositoryService.fetchCoinList().subscribe(coins => {
       if (coins.body) {
         this.coins = coins.body;
+        this.canSearch = true;
         this.coinsLoadingFailed = false;
       } else {
         this.coinsLoadingFailed = true;
@@ -190,9 +191,13 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
    * Otherwise, set it to an empty array.
    */
   private filterCoins(): Array<CoinDto> {
-    if (this.coins.length && this.searchedCoin.length > 1) {
+    if (!this.coins.length) {
+      console.error('Coin list should be populated.', this.coins);
+    }
+
+    if (this.searchedCoin.length > 1) {
       return this.matchCoinPipe.transform(this.coins, this.searchedCoin);
     }
-    throw error('Both coin list and searched coin should be populated.');
+    return new Array<CoinDto>();
   }
 }

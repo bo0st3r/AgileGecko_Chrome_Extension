@@ -21,24 +21,22 @@
     <!--  Coin search searchInput-->
     <div class="col-10 p-inputgroup align-self-center" style="height: 3em;">
       <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
-      <input [(ngModel)]="searchedCoin" [disabled]="!canSearch" autocomplete="off" autofocus id="coin-searched"
-             pInputText placeholder="Name or symbol" type="text" #searchInput>
+      <input #searchInput [(ngModel)]="searchedCoin" [disabled]="!canSearch" autocomplete="off" autofocus
+             id="coin-searched" pInputText placeholder="Name or symbol" type="text">
     </div>
   </div>
 
   <!--  Coin list table-->
   <div class="row justify-content-center">
     <div class="col-12">
-      <p-table [value]="displayedMarkets" [scrollable]="true" [rows]="6"
-               [virtualScroll]="true" [virtualRowHeight]="rowHeight" [lazy]="true"
-               scrollHeight="340px" styleClass="p-datatable-striped">
+      <p-table [lazy]="true" [rows]="8" [scrollable]="true"
+               [value]="displayedMarkets" [virtualRowHeight]="rowHeight" [virtualScroll]="true"
+               scrollHeight="328px" styleClass="p-datatable-striped">
         <!--        Header-->
         <ng-template pTemplate="header">
           <ng-container *ngIf="displayedMarkets && displayedMarkets.length > 0; else listUnset;">
             <tr>
-              <th style="width:23%">Symbol</th>
-              <th style="width:61%">Name</th>
-              <th style="width:16%"></th>
+              <th style="width:100%">Details</th>
             </tr>
           </ng-container>
           <ng-template #listUnset>
@@ -52,46 +50,53 @@
 
         <!--        Body-->
         <ng-template let-coin pTemplate="body">
-          <tr  class="txt-sm">
+          <tr class="txt-sm">
+            <!--            Rank-->
+            <td style="width:8.5%;">
+              <strong>{{coin.marketCapRank || '?'}}</strong>
+            </td>
+
             <!--            Logo-->
-            <td class="text-center" style="width:12%;" [style.height]="rowHeight">
-              <span class="p-overlay-badge">
+            <td class="text-center" style="width:12%;">
+              <span>
                 <r-hyperlink>
-                  <img [src]="coin.image" [alt]="coin.symbol +'\'s price'"
-                       (click)="tabManagerService.openTab(coingecko.TABS.COIN_PAGE + coin.id)"
+                  <img (click)="tabManagerService.openTab(coingecko.TABS.COIN_PAGE + coin.id)"
+                       [alt]="coin.symbol +'\'s price'"
+                       [src]="coin.image"
                        class="hyperlink" height="27px"/>
                 </r-hyperlink>
-                <span>{{coin.marketCapRank}}</span>
               </span>
             </td>
 
-            <!--            Symbol-->
-            <td style="width:13%;" [style.height]="rowHeight" class="overflow-hidden">
-                <p class="d-inline font-weight-bold">{{coin.symbol | uppercase}}</p>
-            </td>
-
             <!--            Name-->
-            <td style="width:39%;" [style.height]="rowHeight">
+            <td style="width:43.5%;">
               <a (click)="tabManagerService.openTab(coingecko.TABS.COIN_PAGE + coin.id)"
                  class="hyperlink" pTooltip="View on CoinGecko" showDelay="100"
-                 tooltipPosition="bottom">{{coin.name}}</a>
+                 tooltipPosition="bottom">
+                <span>
+                  {{coin.name}}
+                </span>
+                <span class="c-light-blue">
+                  ({{coin.symbol | uppercase}})
+                </span>
+              </a>
             </td>
 
             <!--            Price-->
-            <td style="width:20%;" [style.height]="rowHeight">
-              <strong class="">{{coin.currentPrice | currency:'USD':'symbol'}}</strong>
+            <td style="width:20%;">
+              <strong>{{coin.currentPrice | currency:'USD':'symbol'}}</strong>
             </td>
 
             <!--          Icons -->
-            <td style="width:16%;" [style.height]="rowHeight" class="align-middle px-1">
+            <td class="align-middle px-1" style="width:16%;">
               <div class="d-flex justify-content-around">
                 <!--                ChartEx-->
                 <i (click)="tabManagerService.openTab(chartex.PAIR.URL + coin.symbol.toUpperCase());"
                    class="pi pi-chart-line chart-icon"
                    pTooltip="Chart" showDelay="100" tooltipPosition="bottom"></i>
                 <!--                Favorite-->
-                <i (click)="favoriteManagerService.updateAndSaveFavorite(coin)"
-                   [ngClass]="(favoriteManagerService.isFavorite(coin.id)) ? 'favorite-icon' : 'not-favorite-icon'"
+                <i (click)="favoriteManagerService.updateAndSave(coin);"
+                   [ngClass]="(favoriteManagerService.contain(coin.id)) ? 'favorite-icon' : 'not-favorite-icon'"
                    class="pi pi-star font-weight-bold"
                    pTooltip="Favorite" showDelay="100" tooltipPosition="bottom"></i>
               </div>

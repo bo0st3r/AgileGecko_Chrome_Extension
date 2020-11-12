@@ -11,9 +11,9 @@ import {LocalStorageManagerService} from '../../chrome/util/storage/local-storag
  */
 export class FavoriteManagerService {
   /**
-   * Subject object for the {@link _favoriteCoinsIds} list use.
+   * Subject object for the {@link _coinsIds} list use.
    */
-  public favoriteUpdateSubject = new Subject<string[]>();
+  public updateSubject = new Subject<string[]>();
   /**
    *  Key for the favorite coins in local storage.
    */
@@ -21,45 +21,49 @@ export class FavoriteManagerService {
   /**
    * Array of favorite coins.
    */
-  private _favoriteCoinsIds: string[];
-  /**
-   * Contains Bitcoin & ETH representations.
-   */
-  private _defaultFavoritesIds: string[] = ['bitcoin', 'ethereum'];
-
+  private _coinsIds: string[];
 
   /**
-   * Initialize {@link _favoriteCoinsIds}'s value from local storage at key {@link LOCAL_STORAGE_KEY}.
+   * Initialize {@link _coinsIds}'s value from local storage at key {@link LOCAL_STORAGE_KEY}.
    */
   constructor(public localStorageManager: LocalStorageManagerService) {
-    this._favoriteCoinsIds = this.localStorageManager.find(this.LOCAL_STORAGE_KEY);
-    if (!this._favoriteCoinsIds || this._favoriteCoinsIds.length === 0) {
-      this.loadDefaultFavorites();
+    this._coinsIds = this.localStorageManager.find(this.LOCAL_STORAGE_KEY);
+    if (!this._coinsIds || this._coinsIds.length === 0) {
+      this.loadDefault();
     }
   }
 
   /**
-   * Updates and save the favoritesMarkets in local storage.
-   * Calls {@link updateFavorite}.
-   * @param coin coin's id to update
+   * Contains Bitcoin & ETH representations.
    */
-  public updateAndSaveFavorite(coin: CoinDto): void {
-    this.updateFavorite(coin.id);
-    this.notify();
-    this.localStorageManager.save(this.LOCAL_STORAGE_KEY, this._favoriteCoinsIds);
+  private _defaultIds: string[] = ['bitcoin', 'ethereum'];
+
+  get defaultIds(): string[] {
+    return this._defaultIds;
   }
 
   /**
-   * Add or remove a coin id from {@link _favoriteCoinsIds}, depending on if it's already included in it or not.
+   * Updates and save the favoritesMarkets in local storage.
+   * Calls {@link update}.
+   * @param coin coin's id to update
+   */
+  public updateAndSave(coin: CoinDto): void {
+    this.update(coin.id);
+    console.log('after update', this._coinsIds);
+    this.notify();
+    this.localStorageManager.save(this.LOCAL_STORAGE_KEY, this._coinsIds);
+  }
+
+  /**
+   * Add or remove a coin id from {@link _coinsIds}, depending on if it's already included in it or not.
    * @param coinId coin's id to update
    */
-  public updateFavorite(coinId: string): void {
-    const foundCoin = this._favoriteCoinsIds.find(favorite => favorite === coinId);
-    const indexOfCoin = this._favoriteCoinsIds.indexOf(foundCoin);
-    if (indexOfCoin >= 0) {
-      this._favoriteCoinsIds.splice(indexOfCoin, 1);
+  public update(coinId: string): void {
+    const contains = this.contain(coinId);
+    if (contains) {
+      this.remove(coinId);
     } else {
-      this._favoriteCoinsIds.push(coinId);
+      this.add(coinId);
     }
   }
 
@@ -68,16 +72,20 @@ export class FavoriteManagerService {
    * Compare with the 'some' method and by providing coins' IDs.
    * @param coinId coin's id to compare
    */
-  public isFavorite(coinId: string): boolean {
-    return this._favoriteCoinsIds.some(favorite => favorite === coinId);
+  public contain(coinId: string): boolean {
+    return this._coinsIds.includes(coinId);
+  }
+
+  public get(coinId: string) {
+    return this._coinsIds.find(favorite => favorite === coinId);
   }
 
   /**
-   * Load {@link _favoriteCoinsIds} with {@link _defaultFavoritesIds} if not empty, then notify {@link favoriteUpdateSubject}.
+   * Load {@link _coinsIds} with {@link _defaultIds} if not empty, then notify {@link updateSubject}.
    */
-  public loadDefaultFavorites(): void {
-    if (this._defaultFavoritesIds) {
-      this._favoriteCoinsIds = this._defaultFavoritesIds;
+  public loadDefault(): void {
+    if (this._defaultIds) {
+      this._coinsIds = this._defaultIds;
       this.notify();
     } else {
       console.error(`Tried to load empty default favorites.`);
@@ -85,20 +93,30 @@ export class FavoriteManagerService {
   }
 
   /**
-   * Returns {@link favoriteUpdateSubject} as observable.
+   * Returns {@link updateSubject} as observable.
    */
   public favoriteUpdateAsObservable(): Observable<Array<string>> {
-    return this.favoriteUpdateSubject.asObservable();
+    return this.updateSubject.asObservable();
   }
 
   /**
-   * Notifies subscribers of a new favorite coins list from {@link _favoriteCoinsIds}.
+   * Notifies subscribers of a new favorite coins list from {@link _coinsIds}.
    */
   public notify(): void {
-    this.favoriteUpdateSubject.next(this._favoriteCoinsIds);
+    this.updateSubject.next(this._coinsIds);
   }
 
-  get defaultFavoritesIds(): string[] {
-    return this._defaultFavoritesIds;
+  private add(coinId: string): boolean {
+    const lengthBefore = this._coinsIds.length;
+    this._coinsIds.push(coinId);
+    return this._coinsIds.length !== lengthBefore;
+  }
+
+  private remove(coinId: string): boolean {
+    const indexOfCoin = this._coinsIds.indexOf(coinId);
+    if (indexOfCoin) {
+      this._coinsIds.splice(indexOfCoin, 1);
+    }
+    return indexOfCoin ? true : false;
   }
 }

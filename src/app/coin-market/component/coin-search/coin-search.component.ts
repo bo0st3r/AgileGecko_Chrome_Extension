@@ -43,7 +43,7 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Subscription of the favorite markets {@link FavoriteManagerService}
    */
-  public favoriteMarketsSubscription: Subscription;
+  public favoriteMarketsSub: Subscription;
 
   public coinsFetchingFailed: boolean;
   public canSearch = true;
@@ -84,8 +84,9 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     const fetchSuccess = this.fetchAndUpdateCoins();
     [this.canSearch, this.coinsFetchingFailed] = [fetchSuccess, !fetchSuccess];
 
-    this.favoriteMarketsSubscription = this.favoriteManagerService.favoriteUpdateAsObservable()
+    this.favoriteMarketsSub = this.favoriteManagerService.favoriteUpdateAsObservable()
       .subscribe(favoriteCoinsIds => {
+        console.log('notification on coin search', favoriteCoinsIds);
         this.coinGeckoRepositoryService.fetchMarketsByIds(favoriteCoinsIds).subscribe(marketsResp => {
           this.favoritesMarkets = marketsResp.body;
           this.updateDisplayedMarkets(this.filteredMarkets);
@@ -109,10 +110,10 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Unsubscribe from {@link favoriteMarketsSubscription}.
+   * Unsubscribe from {@link favoriteMarketsSub}.
    */
   public ngOnDestroy(): void {
-    this.favoriteMarketsSubscription.unsubscribe();
+    this.favoriteMarketsSub.unsubscribe();
   }
 
   /**

@@ -3,8 +3,9 @@
 *****************************************************/
 html {
   font-size: 15px;
-  min-width: 440px;
-  max-width: 440px;
+  min-width: 470px;
+  max-width: 470px;
+  height: 100%;
 }
 
 html[theme='dark-mode'] {
@@ -64,11 +65,15 @@ html[theme='dark-mode'] img {
                       Color
 *****************************************************/
 .c-dark {
-  color: #1f1f1f;
+  color: #131313;
 }
 
 .c-red {
   color: #da5d5d;
+}
+
+.c-light-blue {
+  color: #67a6f8;
 }
 
 /****************************************************
@@ -107,7 +112,7 @@ html[theme='dark-mode'] img {
 }
 
 .panel-min-height {
-  min-height: 440px;
+  min-height: 483px;
 }
 
 /** Dialog **/

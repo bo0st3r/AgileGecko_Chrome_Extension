@@ -1,8 +1,8 @@
-import { MatchCoinPipe } from './matching-coin.pipe';
+import { FilterCoinPipe } from './matching-coin.pipe';
 
 describe('MatchingCoinPipe', () => {
   it('create an instance', () => {
-    const pipe = new MatchCoinPipe();
+    const pipe = new FilterCoinPipe();
     expect(pipe).toBeTruthy();
   });
 });

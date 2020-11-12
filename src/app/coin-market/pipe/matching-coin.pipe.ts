@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import {CoinDto} from '../dto/coin-dto';
 
 @Pipe({
-  name: 'matchCoin'
+  name: 'filterCoin'
 })
 /**
  * Filters an array of CoinDto by giving the searched coin name or symbol.
@@ -11,7 +11,7 @@ import {CoinDto} from '../dto/coin-dto';
  * @see sortCoinsByLength
  * @see sortCoinsBySymbolSimilarity
  */
-export class MatchCoinPipe implements PipeTransform {
+export class FilterCoinPipe implements PipeTransform {
   private searchedCoin: string;
   private coins: CoinDto[];
   private matchingCoins: CoinDto[];

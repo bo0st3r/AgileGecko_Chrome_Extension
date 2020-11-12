@@ -41,6 +41,19 @@ export class CoinGeckoRepositoryService {
   }
 
   /**
+   * Fetch markets for the given ids, can also give params.
+   * @param marketsIds array of ids
+   */
+  public fetchMarketsByCoins(coins: CoinDto[], params:MarketQueryParam = defaultMarketQueryParams): Observable<HttpResponse<MarketDto[]>>{
+    const marketsIds = coins.map(coin => {
+      return coin.id;
+    });
+
+    params.ids = marketsIds;
+    return this.fetchMarkets(params);
+  }
+
+  /**
    * Fetch markets for given params.
    * @param params
    */

@@ -39,7 +39,7 @@ export class FavoriteManagerService {
   }
 
   /**
-   * Updates and save the favorites in local storage.
+   * Updates and save the favoritesMarkets in local storage.
    * Calls {@link updateFavorite}.
    * @param coin coin's id to update
    */
@@ -64,7 +64,7 @@ export class FavoriteManagerService {
   }
 
   /**
-   * Check if the favorites list contains the given coin.
+   * Check if the favoritesMarkets list contains the given coin.
    * Compare with the 'some' method and by providing coins' IDs.
    * @param coinId coin's id to compare
    */

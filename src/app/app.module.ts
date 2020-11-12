@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 import {MainTabComponent} from './layout/component/extension-tab/main-tab.component';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
-import {MatchCoinPipe} from './coin-market/pipe/matching-coin.pipe';
+import {FilterCoinPipe} from './coin-market/pipe/matching-coin.pipe';
 import {CoinSearchComponent} from './coin-market/component/coin-search/coin-search.component';
 import {EthereumScannerComponent} from './chain-explorer/component/ethereum-scanner/ethereum-scanner.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -29,7 +29,7 @@ import {ChipsModule} from 'primeng/chips';
     FooterComponent,
     ExtensionHyperlinkComponent,
     HeaderComponent,
-    MatchCoinPipe,
+    FilterCoinPipe,
   ],
   imports: [
     TooltipModule,
@@ -45,7 +45,7 @@ import {ChipsModule} from 'primeng/chips';
     ChipsModule,
   ],
   providers: [
-    MatchCoinPipe
+    FilterCoinPipe
   ],
   bootstrap: [AppComponent]
 })

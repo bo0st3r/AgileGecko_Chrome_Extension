@@ -1,6 +1,6 @@
 <!--Error dialog-->
-<ng-container *ngIf="coinsLoadingFailed">
-  <p-dialog [(visible)]="coinsLoadingFailed" [closeOnEscape]="true"
+<ng-container *ngIf="coinsFetchingFailed">
+  <p-dialog [(visible)]="coinsFetchingFailed" [closeOnEscape]="true"
             [dismissableMask]="true" [draggable]="false"
             [modal]="true" header="Coin list not found" styleClass="loading-error-dialog" visible="true">
     We couldn't load the coins list, please check your Internet access or try later.
@@ -29,12 +29,12 @@
   <!--  Coin list table-->
   <div class="row justify-content-center">
     <div class="col-12">
-      <p-table [value]="displayedCoins" [scrollable]="true" [rows]="6"
+      <p-table [value]="displayedMarkets" [scrollable]="true" [rows]="6"
                [virtualScroll]="true" [virtualRowHeight]="rowHeight" [lazy]="true"
                scrollHeight="340px" styleClass="p-datatable-striped">
         <!--        Header-->
         <ng-template pTemplate="header">
-          <ng-container *ngIf="displayedCoins && displayedCoins.length > 0; else listUnset;">
+          <ng-container *ngIf="displayedMarkets && displayedMarkets.length > 0; else listUnset;">
             <tr>
               <th style="width:23%">Symbol</th>
               <th style="width:61%">Name</th>

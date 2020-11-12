@@ -21,7 +21,6 @@
     <!--  Coin search searchInput-->
     <div class="col-10 p-inputgroup align-self-center" style="height: 3em;">
       <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
-<!--        (ngModelChange)="updateCoinsTable();"-->
       <input [(ngModel)]="searchedCoin" [disabled]="!canSearch" autocomplete="off" autofocus id="coin-searched"
              pInputText placeholder="Name or symbol" type="text" #searchInput>
     </div>

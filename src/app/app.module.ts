@@ -16,7 +16,7 @@ import {TableModule} from 'primeng/table';
 import {TabViewModule} from 'primeng/tabview';
 import {DialogModule} from 'primeng/dialog';
 import {RadioButtonModule} from 'primeng/radiobutton';
-import {ExtensionHyperlinkComponent} from './chrome-tool/component/extension-hyperlink/extension-hyperlink.component';
+import {ExtensionHyperlinkComponent} from './chrome/component/extension-hyperlink/extension-hyperlink.component';
 import {HeaderComponent} from './layout/component/header/header.component';
 import {ChipsModule} from 'primeng/chips';
 

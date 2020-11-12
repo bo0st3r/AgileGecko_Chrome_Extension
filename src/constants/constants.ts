@@ -6,7 +6,7 @@ const HTTP = {
  * Number of ms between 2 actions.
  * Usage's example: debounce time between typing 2 characters.
  */
-const MS_BETWEEN = 390;
+const MS_BETWEEN = 330;
 
 export const constants = {
   HTTP,

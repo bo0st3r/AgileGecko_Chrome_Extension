@@ -37,8 +37,6 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public displayedCoins: Array<MarketDto> = new Array<MarketDto>();
 
-  // public filteredCoins: Array<CoinDto> = new Array<CoinDto>();
-
   public filteredMarkets: Array<MarketDto> = new Array<MarketDto>();
 
   /**
@@ -52,19 +50,19 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   public favoriteCoinsSubscription: Subscription;
 
   public coinsLoadingFailed: boolean;
-  public canSearch = false;
+  public canSearch = true;
 
   /**
    * Search input element.
    */
   @ViewChild('searchInput')
-  public searchInput: ElementRef;
+  public readonly searchInput: ElementRef;
   /**
    * Observable for the search input element: {@link searchInput}.
    */
   public inputObs: Observable<Event>;
 
-  public rowHeight = 41;
+  public readonly rowHeight = 41;
 
   constructor(
     private localStorageManagerService: LocalStorageManagerService,
@@ -83,7 +81,8 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
    * - Fetch the favorite list with {@link FavoriteManagerService} and update {@link favorites}.
    */
   ngOnInit(): void {
-    this.fetchAndUpdateCoins();
+    const fetchSuccess = this.fetchAndUpdateCoins();
+    [this.canSearch, this.coinsLoadingFailed] = [fetchSuccess, !fetchSuccess];
 
     this.favoriteCoinsSubscription = this.favoriteManagerService.favoriteUpdateAsObservable()
       .subscribe(favoriteCoinsIds => {
@@ -92,12 +91,11 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
           this.updateDisplayedMarkets();
         });
       });
-
     this.favoriteManagerService.notify();
   }
 
   /**
-   * Set a debounce time between typing characters for filtering and fetching coins.
+   * Set a debounce time between typing two characters for filtering and fetching coins.
    */
   ngAfterViewInit(): void {
     this.inputObs = fromEvent(this.searchInput.nativeElement, 'keydown');
@@ -170,19 +168,13 @@ export class CoinSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Fetch the coin list with {@link CoinGeckoRepositoryService} and update {@link coinsLoadingFailed}.
    */
-  private fetchAndUpdateCoins(): void {
+  private fetchAndUpdateCoins(): boolean {
     this.coinGeckoRepositoryService.fetchCoinList().subscribe(coins => {
-      if (coins.body) {
-        this.coins = coins.body;
-        this.canSearch = true;
-        this.coinsLoadingFailed = false;
-      } else {
-        this.coinsLoadingFailed = true;
-      }
+      this.coins = coins.body;
     }, error => {
-      this.coinsLoadingFailed = true;
       throw error;
     });
+    return true;
   }
 
   /**

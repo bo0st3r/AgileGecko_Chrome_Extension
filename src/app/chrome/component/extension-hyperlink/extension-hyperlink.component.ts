@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {TabManagerService} from '../../../chrome/util/tab/tab-manager.service';
+import {TabManagerService} from '../../util/tab/tab-manager.service';
 
 @Component({
   selector: 'r-extension-hyperlink',

@@ -1,7 +1,8 @@
 {
-  "name": "Agile Gecko",
+  "author": "@bo0st3r - Github",
+  "name": "Ronin Extension",
   "version": "1.0",
-  "description": "Chrome extension that makes reaching a CoinGecko coin's page faster.",
+  "description": "Simplifies your cryptocurrencies-investor life.",
   "manifest_version": 2,
   "permissions": [
     "storage",
@@ -14,7 +15,17 @@
   ],
   "browser_action": {
     "default_popup": "index.html"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://app.uniswap.org/*"
+      ],
+      "js": [
+        "scripts/uniswap-warning-remover.js"
+      ]
+    }
+  ]
 }
 
 

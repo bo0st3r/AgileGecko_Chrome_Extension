@@ -33,7 +33,9 @@
               "./node_modules/primeflex/primeflex.css",
               "node_modules/primeicons/primeicons.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/scripts/uniswap-warning-remover.js"
+            ]
           },
           "configurations": {
             "production": {

@@ -8,12 +8,14 @@
     </div>
 
     <!--    Search searchInput-->
-    <div class="col-10 p-inputgroup align-self-center" style="height: 3em;">
-      <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
-      <input
-        (ngModelChange)="updateSearchingBools($event)" [(ngModel)]="searchValue" autocomplete="off" autofocus
-        coin id="address-searched" pInputText label="Name or symbol"
-        placeholder="Address, contract, tx, ..." type=text>
+    <div class="col-10" style="height: 3em;">
+      <span class="p-inputgroup align-self-center">
+        <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+        <input
+          (ngModelChange)="updateSearchingBools($event)" [(ngModel)]="searchValue" autocomplete="off" autofocus
+          coin id="address-searched" pInputText label="Name or symbol"
+          placeholder="Address, contract, tx, ..." type=text>
+      </span>
     </div>
   </div>
 

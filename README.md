@@ -1,5 +1,12 @@
 # AgileGecko
 
+## Features
+* Search coins and access their [CoinGecko](https://www.coingecko.com) and [ChartEx](https://www.chartex.pro) quickly
+* Save coins as favorite for even faster future look-ups
+* Remove Uniswap's warning box when swapping coins
+* Reach Etherscan pages (and sub-pages) for addresses, contracts, transactions and blocks quickly
+
+
 ## Install the extension 
 ### Requirements
 * A Chromium based browser (Chrome, Brave, Opera, ...) 

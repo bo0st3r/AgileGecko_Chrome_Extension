@@ -15,7 +15,10 @@
   }
 
   // Queries the "I understand" box
-  let checkBoxParent = document.querySelector('.understand-checkbox').parentElement;
+  const checkBox = document.querySelector('.understand-checkbox');
+  if (!checkBox.parentElement)
+    return;
+  const checkBoxParent = checkBox.parentElement;
 
   // Checks the "I understand" box, then clicks on the button
   if (btn && checkBoxParent) {

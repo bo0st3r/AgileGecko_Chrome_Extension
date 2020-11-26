@@ -19,10 +19,8 @@
     </div>
 
     <!--  Coin search searchInput-->
-    <div class="col-10 p-inputgroup align-self-center" style="height: 3em;">
-      <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
-      <input #searchInput [(ngModel)]="searchedCoin" [disabled]="!canSearch" autocomplete="off" autofocus
-             id="coin-searched" pInputText placeholder="Name or symbol" type="text">
+    <div class="col-10" style="height: 3em;">
+      <app-coin-search-input></app-coin-search-input>
     </div>
   </div>
 
@@ -30,7 +28,7 @@
   <div class="row justify-content-center">
     <div class="col-12">
       <p-table [lazy]="true" [rows]="8" [scrollable]="true"
-               [value]="displayedMarkets" [virtualRowHeight]="rowHeight" [virtualScroll]="true"
+               [value]="displayedMarkets" [virtualRowHeight]="tableRowHeight" [virtualScroll]="true"
                scrollHeight="328px" styleClass="p-datatable-striped">
         <!--        Header-->
         <ng-template pTemplate="header">
@@ -96,7 +94,7 @@
                    pTooltip="Chart" showDelay="100" tooltipPosition="bottom"></i>
                 <!--                Favorite-->
                 <i (click)="favoriteManagerService.updateAndSave(coin);"
-                   [ngClass]="(favoriteManagerService.contain(coin.id)) ? 'favorite-icon' : 'not-favorite-icon'"
+                   [ngClass]="(favoriteManagerService.contains(coin.id)) ? 'favorite-icon' : 'not-favorite-icon'"
                    class="pi pi-star font-weight-bold"
                    pTooltip="Favorite" showDelay="100" tooltipPosition="bottom"></i>
               </div>

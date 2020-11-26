@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CoinDto} from '../../coin-market/dto/coin-dto';
-import {Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {LocalStorageManagerService} from '../../chrome/util/storage/local-storage-manager.service';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class FavoriteManagerService {
   /**
    * Subject object for the {@link _coinsIds} list use.
    */
-  public updateSubject = new Subject<string[]>();
+  public updateSubject = new BehaviorSubject<string[]>([]);
   /**
    *  Key for the favorite coins in local storage.
    */
@@ -42,6 +42,10 @@ export class FavoriteManagerService {
     return this._defaultIds;
   }
 
+  public getFavorites(): string[] {
+    return this.updateSubject.value;
+  }
+
   /**
    * Updates and save the favoritesMarkets in local storage.
    * Calls {@link update}.
@@ -50,7 +54,7 @@ export class FavoriteManagerService {
   public updateAndSave(coin: CoinDto): void {
     this.update(coin.id);
     console.log('after update', this._coinsIds);
-    this.notify();
+    // this.notify();
     this.localStorageManager.save(this.LOCAL_STORAGE_KEY, this._coinsIds);
   }
 
@@ -59,7 +63,7 @@ export class FavoriteManagerService {
    * @param coinId coin's id to update
    */
   public update(coinId: string): void {
-    const contains = this.contain(coinId);
+    const contains = this.contains(coinId);
     if (contains) {
       this.remove(coinId);
     } else {
@@ -72,7 +76,7 @@ export class FavoriteManagerService {
    * Compare with the 'some' method and by providing coins' IDs.
    * @param coinId coin's id to compare
    */
-  public contain(coinId: string): boolean {
+  public contains(coinId: string): boolean {
     return this._coinsIds.includes(coinId);
   }
 

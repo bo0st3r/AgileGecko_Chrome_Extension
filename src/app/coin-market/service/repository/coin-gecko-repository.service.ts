@@ -24,7 +24,7 @@ export class CoinGeckoRepositoryService {
   /**
    * Fetch the list of all coins.
    */
-  public fetchCoinList(): Observable<HttpResponse<CoinDto[]>> {
+  public fetchCoins(): Observable<HttpResponse<CoinDto[]>> {
     let request = this.httpClient.get<CoinDto[]>(coingecko.ENDPOINTS.COINS_LIST,
       {observe: 'response'});
     request = request.pipe(retry(constants.HTTP.NB_TRIALS));

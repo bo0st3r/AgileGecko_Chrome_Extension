@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 import {MainTabComponent} from './layout/component/extension-tab/main-tab.component';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
-import {FilterCoinPipe} from './coin-market/pipe/matching-coin.pipe';
+import {FilterCoinsPipe} from './coin-market/pipe/filter-coins.pipe';
 import {CoinSearchComponent} from './coin-market/component/coin-search/coin-search.component';
 import {EthereumScannerComponent} from './chain-explorer/component/ethereum-scanner/ethereum-scanner.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -19,6 +19,8 @@ import {RadioButtonModule} from 'primeng/radiobutton';
 import {ExtensionHyperlinkComponent} from './chrome/component/extension-hyperlink/extension-hyperlink.component';
 import {HeaderComponent} from './layout/component/header/header.component';
 import {ChipsModule} from 'primeng/chips';
+import {CoinSearchInputComponent} from './coin-market/component/coin-search-input/coin-search-input.component';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [
@@ -29,23 +31,25 @@ import {ChipsModule} from 'primeng/chips';
     FooterComponent,
     ExtensionHyperlinkComponent,
     HeaderComponent,
-    FilterCoinPipe,
+    FilterCoinsPipe,
+    CoinSearchInputComponent,
   ],
-  imports: [
-    TooltipModule,
-    BrowserModule,
-    HttpClientModule,
-    FormsModule,
-    InputTextModule,
-    TableModule,
-    TabViewModule,
-    DialogModule,
-    BrowserAnimationsModule,
-    RadioButtonModule,
-    ChipsModule,
-  ],
+    imports: [
+        TooltipModule,
+        BrowserModule,
+        HttpClientModule,
+        FormsModule,
+        InputTextModule,
+        TableModule,
+        TabViewModule,
+        DialogModule,
+        BrowserAnimationsModule,
+        RadioButtonModule,
+        ChipsModule,
+        ProgressSpinnerModule,
+    ],
   providers: [
-    FilterCoinPipe
+    FilterCoinsPipe
   ],
   bootstrap: [AppComponent]
 })

@@ -51,8 +51,7 @@ export class CoinListManagerService implements OnDestroy {
   }
 
   private nextCoins(coins: CoinDto[]): void {
-    setTimeout(() =>   this.coinListSubject.next(coins), 2000);
-    // this.coinListSubject.next(coins);
+    this.coinListSubject.next(coins);
   }
 
   private fetch() {

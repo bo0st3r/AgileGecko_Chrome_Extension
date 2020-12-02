@@ -8,7 +8,7 @@ import {chartex} from '../../../../constants/chartex';
 import {MarketDto} from '../../dto/market-dto';
 import {CoinSearchManagerService} from '../../service/coin-search-manager.service';
 import {CoinListManagerService} from '../../service/coin-list-manager.service';
-import {map, skip} from 'rxjs/operators';
+import {skip, take} from 'rxjs/operators';
 
 @Component({
   selector: 'r-coin-search',
@@ -54,7 +54,19 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
             return;
           }
 
-          this.fetchFilteredMarkets(search);
+          if (!this.coinListManagerService.getCoins()) {
+            this.coinListManagerService
+              .coinsAsObservable()
+              // Skip first because it's a from a BehaviourSubject
+              // Then take 1 because we only want to take the first input
+              .pipe(skip(1), take(1))
+              .subscribe(() => {
+                  this.fetchFilteredMarkets(search);
+                }
+              );
+          } else {
+            this.fetchFilteredMarkets(search);
+          }
         },
         error => {
           console.error(error);
@@ -97,8 +109,9 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
    * @private
    */
   private fetchFilteredMarkets(search: string): void {
+    const filteredCoins = this.coinListManagerService.filter(search);
     this.coinGeckoRepositoryService
-      .fetchMarketsByCoins(this.coinListManagerService.filterCoins(search))
+      .fetchMarketsByCoins(filteredCoins)
       .subscribe(marketsResp => {
         this.coinsFetchingFailed = false;
         this.displayedMarkets = marketsResp.body;
@@ -106,5 +119,4 @@ export class CoinSearchComponent implements OnInit, OnDestroy {
         this.coinsFetchingFailed = true;
       });
   }
-
 }

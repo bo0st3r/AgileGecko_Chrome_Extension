@@ -1,6 +1,8 @@
 <div class="p-inputgroup align-self-center">
   <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
-  <input #searchInput [(ngModel)]="searchedCoin" [disabled]="!canSearch" autocomplete="off" autofocus
+<!--         [disabled]="!canSearch"-->
+  <input #searchInput [(ngModel)]="searchedCoin"
+         autocomplete="off" autofocus
          id="coin-searched" pInputText placeholder="Name or symbol" type="text">
   <span *ngIf="!canSearch" [style]="{width: '46.5px', height: '46.5px', marginLeft: '12px'}">
     <p-progressSpinner strokeWidth="4" [style]="{width: '100%', height: '100%'}"></p-progressSpinner>

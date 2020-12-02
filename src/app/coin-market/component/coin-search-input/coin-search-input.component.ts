@@ -22,7 +22,7 @@ export class CoinSearchInputComponent implements OnInit, AfterViewInit, OnDestro
    * Search input element.
    */
   @ViewChild('searchInput')
-  public readonly searchInput: ElementRef;
+  public searchInput: ElementRef;
 
   /**
    * Name or symbol of the searched coin.
@@ -31,7 +31,7 @@ export class CoinSearchInputComponent implements OnInit, AfterViewInit, OnDestro
 
   public canSearch: boolean;
 
-  private coinSearchSub: Subscription;
+  private coinListSub: Subscription;
 
   constructor(private coinGeckoRepositoryService: CoinGeckoRepositoryService,
               private coinSearchManagerService: CoinSearchManagerService,
@@ -39,22 +39,19 @@ export class CoinSearchInputComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngOnInit(): void {
-    this.coinSearchSub = this.coinListManagerService.coinsAsObservable().subscribe(coins => {
-      setTimeout(()=>{
-        this.canSearch = (coins && coins.length) ? true : false;
-
-      }, 2000)
+    this.coinListSub = this.coinListManagerService.coinsAsObservable().subscribe(coins => {
+      this.canSearch = (coins && coins.length) ? true : false;
     }, error => {
       this.canSearch = false;
     }, () => {
       if (!this.canSearch) {
-        throw new Error('Can not search for coins as could not retrieve the list.');
+        throw new Error('Can not search for coins since could not retrieve the list.');
       }
     });
   }
 
   ngOnDestroy(): void {
-    this.coinSearchSub.unsubscribe();
+    this.coinListSub.unsubscribe();
   }
 
   /**
@@ -62,9 +59,12 @@ export class CoinSearchInputComponent implements OnInit, AfterViewInit, OnDestro
    */
   ngAfterViewInit(): void {
     this.inputObs = fromEvent(this.searchInput.nativeElement, 'keydown');
-    this.inputObs.pipe(debounceTime(constants.MS_BETWEEN)).subscribe(() => {
-      this.searchedCoin = this.searchedCoin.trim();
-      this.coinSearchManagerService.nextSearch(this.searchedCoin);
-    });
+    this.inputObs
+      .pipe(debounceTime(constants.MS_BETWEEN))
+      .subscribe(() => {
+        this.searchedCoin = this.searchedCoin.trim();
+        this.coinSearchManagerService.nextSearch(this.searchedCoin);
+      });
   }
 }
+

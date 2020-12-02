@@ -53,7 +53,6 @@ export class FavoriteManagerService {
    */
   public updateAndSave(coin: CoinDto): void {
     this.update(coin.id);
-    console.log('after update', this._coinsIds);
     // this.notify();
     this.localStorageManager.save(this.LOCAL_STORAGE_KEY, this._coinsIds);
   }

@@ -25,7 +25,10 @@
         "scripts/uniswap-warning-remover.js"
       ]
     }
-  ]
+  ],
+  "icons": {
+    "128": "assets/samurai-helmet128.png"
+  }
 }
 
 
